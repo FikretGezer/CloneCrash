@@ -17,9 +17,15 @@ public class ItemPlacement : MonoBehaviour
     [SerializeField] private float minY;
     [SerializeField] private float maxY;
 
-    private bool[,] placementAvailablity;
+    public int[,] placementAvailablity;
+    public GameObject[,] placedObjects;
     public List<string> emptyIndices = new List<string>();
 
+    public static ItemPlacement _instance;
+    private void Awake()
+    {
+        if (_instance == null) _instance = this;
+    }
 
     private void Start()
     {
@@ -33,7 +39,8 @@ public class ItemPlacement : MonoBehaviour
         int verticalCount = (int)((maxY - minY) / 1.3f) + 1;
 
         float xPos = minX, yPos = minY;
-        placementAvailablity = new bool[horizontalCount, verticalCount];
+        placementAvailablity = new int[horizontalCount, verticalCount];
+        placedObjects = new GameObject[horizontalCount, verticalCount];
 
 
         for (int y = 0; y < verticalCount; y++)
@@ -45,11 +52,15 @@ public class ItemPlacement : MonoBehaviour
                 //bool isEmpty = Physics.CheckSphere(new Vector3(xPos, yPos, 0), 0.1f);
                 if (isEmpty)
                 {
-                    emptyIndices.Add($"{x}, {y}");
+                    emptyIndices.Add($"{x},{y}");
+                    placementAvailablity[x, y] = 2;//2 means cant replace anything
                 }
                 else
                 {
                     var item = Instantiate(blockPrefab, new Vector3(xPos, yPos), Quaternion.identity);
+                    placementAvailablity[x, y] = 0;
+                    placedObjects[x, y] = item;
+                    item.name = $"{x},{y}";
                     item.GetComponent<SpriteRenderer>().sprite = items[Random.Range(0, items.Length)];
                 }
                 //emptyIndices.Add($"{xPos}, {yPos}");
