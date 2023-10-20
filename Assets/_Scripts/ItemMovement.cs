@@ -12,9 +12,9 @@ public class ItemMovement : MonoBehaviour
     
     private Vector3 startPos, endPos;
     private GameObject startObject, endObject;
-    private bool isDrawing = true;
     private List<GameObject> colLook = new List<GameObject>();
     private int x, y;
+    private int endY, endX;
     private bool objectsMoving;
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class ItemMovement : MonoBehaviour
         var pos = mainCam.ScreenPointToRay(Input.mousePosition);
         if(!objectsMoving)
         {
+            
             if (Input.GetMouseButtonDown(0))
             {
                 startPos = pos.origin;
@@ -51,10 +52,9 @@ public class ItemMovement : MonoBehaviour
             {
                 endPos = pos.origin;
                 var dir = (endPos - startPos).normalized;
-                var angle = DirToAngleDeg(dir);
+                var angle = DirToAngleDeg(dir);                
                 if (startObject != null)
                 {
-                    isDrawing = false;
                     var xLength = ItemPlacement._instance.placementAvailablity.GetLength(0);
                     var yLength = ItemPlacement._instance.placementAvailablity.GetLength(1);
                     if ((angle < 45f && angle >= 0f) || (angle > 315f && angle < 360f))
@@ -62,11 +62,9 @@ public class ItemMovement : MonoBehaviour
                         #region First Method
                         if (x + 1 < xLength && ItemPlacement._instance.placementAvailablity[x + 1, y] != 2)
                         {
-                            x = x + 1;
-                            //var endObjPos = (Vector2)startObject.transform.position + new Vector2(1.28f, 0f);
-                            //Collider2D[] col = Physics2D.OverlapCircleAll(endObjPos, 0.1f);
-                            //endObject = col[0].gameObject;                            
+
                             MovementCheck(1.28f, 0f);
+                            endX = x + 1;                           
                         }
                         #endregion
                         #region Second Method
@@ -83,48 +81,29 @@ public class ItemMovement : MonoBehaviour
                     {
                         if (y + 1 < yLength && ItemPlacement._instance.placementAvailablity[x, y + 1] != 2)
                         {
-                            y = y + 1;
-                            //var endObjPos = (Vector2)startObject.transform.position + new Vector2(0f, 1.28f);
-                            //Collider2D[] col = Physics2D.OverlapCircleAll(endObjPos, 0.1f);
-                            //endObject = col[0].gameObject;                            
                             MovementCheck(0f, 1.28f);
+                            endY = y + 1;                        
                         }
                     }
                     else if (angle > 135f && angle < 225f)
                     {
                         if (x - 1 >= 0 && ItemPlacement._instance.placementAvailablity[x - 1, y] != 2)
                         {
-                            x = x - 1;
-                            //var endObjPos = (Vector2)startObject.transform.position + new Vector2(-1.28f, 0f);
-                            //Collider2D[] col = Physics2D.OverlapCircleAll(endObjPos, 0.1f);
-                            //endObject = col[0].gameObject;
                             MovementCheck(-1.28f, 0f);
+                            endX = x - 1;
                         }
                     }
                     else if (angle > 225f && angle < 315f)
                     {
                         if (y - 1 >= 0 && ItemPlacement._instance.placementAvailablity[x, y - 1] != 2)
                         {
-                            y = y - 1;
-                            //var endObjPos = (Vector2)startObject.transform.position + new Vector2(0f, -1.28f);
-                            //Collider2D[] col = Physics2D.OverlapCircleAll(endObjPos, 0.1f);
-                            //endObject = col[0].gameObject;
                             MovementCheck(0f, -1.28f);
+                            endY = y - 1;
                         }
                     }
                     if (endObject != null)
                     {
-                        current = 0f;
-                        tempStartPos = startObject.transform.position;
-                        tempEndPos = endObject.transform.position;
-
-                        var tempName = startObject.name;
-                        startObject.name = endObject.name;
-                        endObject.name = tempName;
-
-                        //var tempIndex = 
-                            //ItemPlacement._instance.placedObjects[x, y];
-                        //ItemPlacement._instance.placedObjects[x, y] = 
+                        ResetObjectsMovement();
                     }
                         
                 }
@@ -133,20 +112,13 @@ public class ItemMovement : MonoBehaviour
         }
         if (startObject != null && endObject != null)
         {
-            isDrawing = true;
             objectsMoving = true;
 
+            var temp = ItemPlacement._instance.placedObjects[x, y];
+            ItemPlacement._instance.placedObjects[x, y] = ItemPlacement._instance.placedObjects[endX, endY];
+            ItemPlacement._instance.placedObjects[endX, endY] = temp;
+
             MoveThem();
-
-            //var tempPos = startObject.transform.position;
-            //var tempName = startObject.name;
-
-            //startObject.transform.position = endObject.transform.position;
-            //startObject.name = endObject.name;
-
-            //endObject.transform.position = tempPos;
-            //endObject.name = tempName;
-            //startObject = endObject = null;
         }
     }
     private void MovementCheck(float xValue, float yValue)
@@ -159,6 +131,16 @@ public class ItemMovement : MonoBehaviour
     {
         Gizmos.DrawLine(startPos, endPos);
     }
+    private void ResetObjectsMovement()
+    {
+        current = 0f;
+        tempStartPos = startObject.transform.position;
+        tempEndPos = endObject.transform.position;
+
+        var tempName = startObject.name;
+        startObject.name = endObject.name;
+        endObject.name = tempName;
+    }
     bool tryAgain;
     private void MoveThem()
     {      
@@ -168,66 +150,76 @@ public class ItemMovement : MonoBehaviour
         endObject.transform.position = Vector3.Lerp(endObject.transform.position, tempStartPos, current);
         
         if(current == target)
-        {            
-            if(tryAgain)
-            {
-                objectsMoving = false;
-                startObject = endObject = null;
-                tryAgain = false;
-            }
-            else
-            {
-                current = 0f;
-                tempStartPos = startObject.transform.position;
-                tempEndPos = endObject.transform.position;
-
-                var tempName = startObject.name;
-                startObject.name = endObject.name;
-                endObject.name = tempName;
-                tryAgain = true;
-            }
+        {
+            CheckLines();
+            //if(tryAgain)
+            //{
+            //    objectsMoving = false;
+            //    startObject = endObject = null;
+            //    tryAgain = false;
+            //}
+            //else
+            //{
+            //    ResetObjectsMovement();
+            //    tryAgain = true;
+            //}
+            objectsMoving = false;
+            startObject = endObject = null;
         }
     }
-    private void CheckAround(GameObject obj)
+    private void CheckLines()
     {
-        var name = obj.name.Split(',');
-        int xIndex = Convert.ToInt32(name[0]);
-        int yIndex = Convert.ToInt32(name[1]);
+        var objList = ItemPlacement._instance.placedObjects;
+        var xLength = objList.GetLength(0);
+        var yLength = objList.GetLength(1);
 
-        int xLength = ItemPlacement._instance.placementAvailablity.GetLength(0);
-        int yLength = ItemPlacement._instance.placementAvailablity.GetLength(1);
+        List<List<int>> indices = new List<List<int>>();
+        Sprite currentImage = null;
 
-        int xCount = 0;
-        int yCount = 0;
-        int lastIndexXRight = xIndex;
-        int lastIndexXLeft = xIndex;
-        
-        for (int x = xIndex + 1; x < xLength; x++)
+        for (int yCur = 0; yCur < yLength; yCur++)
         {
-            var currentObj = ItemPlacement._instance.placedObjects[x, yIndex];
-            if (currentObj != null && currentObj.GetComponent<SpriteRenderer>().sprite == obj.GetComponent<SpriteRenderer>().sprite)
+            int countX = 0;
+            int startIndex = 0;
+            for (int xCur = 0; xCur < xLength; xCur++)
             {
-                xCount++;
-                lastIndexXRight = x;
-            }
-            else break;
+                if (objList[xCur, yCur] == null)
+                {
+                    currentImage = null;
+                    continue;
+                }
+                if (currentImage == null)//Assign the sprite that is gonna be controlled
+                {                    
+                    currentImage = objList[xCur, yCur].GetComponent<SpriteRenderer>().sprite;
+                    startIndex = xCur;
+                    countX = 1;
+                }
+                else // Check if there is a trio or more as the current item
+                {
+                    if(currentImage == objList[xCur, yCur].GetComponent<SpriteRenderer>().sprite)
+                    {
+                        countX++;
+                    }
+                    else
+                    {
+                        currentImage = null;
+                        Debug.Log($"Iteration: {xCur}{yCur} - Count: {countX}");
+                        if (countX >= 3)
+                        {
+                            for (int i = 0; i < countX; i++)
+                            {
+                                indices.Add(new List<int> { startIndex, yCur });
+                                startIndex++;
+                            }
+                        }
+                    }
+                }
+            }            
         }
-        for (int x = xIndex - 1; x > 0; x--)
+        for (int i = 0; i < indices.Count; i++)
         {
-            var currentObj = ItemPlacement._instance.placedObjects[x, yIndex];
-            if (currentObj != null && currentObj.GetComponent<SpriteRenderer>().sprite == obj.GetComponent<SpriteRenderer>().sprite)
-            {
-                xCount++;
-                lastIndexXLeft = x;
-            }
-            else break;
-        }
-        if(xCount >= 3)
-        {
-            for (int x = lastIndexXLeft; x < lastIndexXRight; x++)
-            {
-                Destroy(ItemPlacement._instance.placedObjects[x, yIndex]);
-            }
+            int xInd = indices[i][0];
+            int yInd = indices[i][1];
+            Destroy(ItemPlacement._instance.placedObjects[xInd, yInd]);
         }
     }
     private float DirToAngleDeg(Vector2 v)

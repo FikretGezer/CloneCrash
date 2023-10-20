@@ -53,12 +53,14 @@ public class ItemPlacement : MonoBehaviour
                 if (isEmpty)
                 {
                     emptyIndices.Add($"{x},{y}");
-                    placementAvailablity[x, y] = 2;//2 means cant replace anything
+                    placementAvailablity[x, y] = 2;//2 means cant replaceable
+                                                   //1 means can replaceable but it's full rn
+                                                   //0 means can replaceable
                 }
                 else
                 {
                     var item = Instantiate(blockPrefab, new Vector3(xPos, yPos), Quaternion.identity);
-                    placementAvailablity[x, y] = 0;
+                    placementAvailablity[x, y] = 1;
                     placedObjects[x, y] = item;
                     item.name = $"{x},{y}";
                     item.GetComponent<SpriteRenderer>().sprite = items[Random.Range(0, items.Length)];
