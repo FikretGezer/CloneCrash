@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Dot Orange
+  - Dot Green
+  - Dot Purple
+  - Dot Red
+  - Dot Blue
+  - Dot Yellow
   layers:
   - Default
   - TransparentFX

@@ -39,7 +39,7 @@ public class ItemPlacement : MonoBehaviour
         int verticalCount = (int)((maxY - minY) / 1.3f) + 1;
 
         float xPos = minX, yPos = minY;
-        placementAvailablity = new int[horizontalCount, verticalCount];
+        //placementAvailablity = new int[horizontalCount, verticalCount];
         placedObjects = new GameObject[horizontalCount, verticalCount];
 
 
@@ -49,24 +49,21 @@ public class ItemPlacement : MonoBehaviour
             {
                 totalCount++;
                 bool isEmpty = IsEmpty(new Vector3(xPos, yPos, 0));
-                //bool isEmpty = Physics.CheckSphere(new Vector3(xPos, yPos, 0), 0.1f);
                 if (isEmpty)
                 {
                     emptyIndices.Add($"{x},{y}");
-                    placementAvailablity[x, y] = 2;//2 means cant replaceable
+                    //placementAvailablity[x, y] = 2;//2 means cant replaceable
                                                    //1 means can replaceable but it's full rn
                                                    //0 means can replaceable
                 }
                 else
                 {
                     var item = Instantiate(blockPrefab, new Vector3(xPos, yPos), Quaternion.identity);
-                    placementAvailablity[x, y] = 1;
+                    //placementAvailablity[x, y] = 1;
                     placedObjects[x, y] = item;
                     item.name = $"{x},{y}";
                     item.GetComponent<SpriteRenderer>().sprite = items[Random.Range(0, items.Length)];
                 }
-                //emptyIndices.Add($"{xPos}, {yPos}");
-                //placementAvailablity[x, y] = true;
                 xPos += 1.3f;
             }
             yPos += 1.3f;
@@ -93,10 +90,5 @@ public class ItemPlacement : MonoBehaviour
             if(block.gameObject.activeInHierarchy)
                 positions.Add(block.position);
         }
-    }
-    public float radius = 1f;
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(new Vector3(0, 0, 0), radius);
     }
 }

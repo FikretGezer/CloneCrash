@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ItemMovementSecond : MonoBehaviour
 {
@@ -8,12 +9,13 @@ public class ItemMovementSecond : MonoBehaviour
 
     private Camera mainCam;
     private float current, target;
-    private Vector3 tempStartPos, tempEndPos;
+    private Vector3 startObjTargetPos, endObjTargetPos;
     
     private Vector3 startPos, endPos;
     private GameObject startObject, endObject;
     private int x, y;
     private int endY, endX;
+    private int xLength, yLength;
     public bool ObjectsMoving { get; private set; }
 
     public static ItemMovementSecond Instance;
@@ -23,16 +25,29 @@ public class ItemMovementSecond : MonoBehaviour
         mainCam = Camera.main;
         target = 1f;
     }
+    private void Start()
+    {
+        xLength = ItemPlacement._instance.placedObjects.GetLength(0);
+        yLength = ItemPlacement._instance.placedObjects.GetLength(1);
+    }
     private void Update()
     {
+        //Get mouse position
         var pos = mainCam.ScreenPointToRay(Input.mousePosition);
+
         if(!ObjectsMoving)
         {            
             if (Input.GetMouseButtonDown(0))
             {
-                startPos = pos.origin;
-                Collider2D[] col = Physics2D.OverlapCircleAll(startPos, 0.1f);               
+                resetCount = 0;
+                testPassed = false;
 
+                //Set mouse pos for detecting startObject 
+                startPos = pos.origin;
+                //Check is there any object at the position that is clicked
+                Collider2D[] col = Physics2D.OverlapCircleAll(startPos, 0.1f);
+
+                //If there is set it as a startObjet
                 if (col.Length > 0)
                 {
                     startObject = col[0].gameObject;
@@ -46,139 +61,137 @@ public class ItemMovementSecond : MonoBehaviour
             }
             if (Input.GetMouseButtonUp(0))
             {
-                endPos = pos.origin;
+                endPos = pos.origin;//Set mouse pos for detecting endObject
+
+                //Detect movement angle
                 var dir = (endPos - startPos).normalized;
                 var angle = DirToAngleDeg(dir);
+
                 if (startObject != null)
-                {
-                    var xLength = ItemPlacement._instance.placedObjects.GetLength(0);
-                    var yLength = ItemPlacement._instance.placedObjects.GetLength(1);
-                    if ((angle < 45f && angle >= 0f) || (angle > 315f && angle < 360f))
+                {                    
+                    if ((angle < 45f && angle >= 0f) || (angle > 315f && angle < 360f)) //Finger movement to the RIGHT
                     {
                         if (x + 1 < xLength && ItemPlacement._instance.placedObjects[x + 1, y] != null)
                         {
-                            SetEndObject(x + 1, y);
+                            AssignEndObject(x + 1, y);
                         }
                     }
-                    else if (angle > 45f && angle < 135f)
+                    else if (angle > 45f && angle < 135f)//Finger movement to the UP
                     {
                         if (y + 1 < yLength && ItemPlacement._instance.placedObjects[x, y + 1] != null)
                         {
-                            SetEndObject(x, y + 1);
+                            AssignEndObject(x, y + 1);
                         }
                     }
-                    else if (angle > 135f && angle < 225f)
+                    else if (angle > 135f && angle < 225f)//Finger movement to the LEFT
                     {
                         if (x - 1 >= 0 && ItemPlacement._instance.placedObjects[x - 1, y] != null)
                         {
-                            SetEndObject(x - 1, y);
+                            AssignEndObject(x - 1, y);
                         }
                     }
-                    else if (angle > 225f && angle < 315f)
+                    else if (angle > 225f && angle < 315f)//Finger movement to the DOWN
                     {
                         if (y - 1 >= 0 && ItemPlacement._instance.placedObjects[x, y - 1] != null)
                         {
-                            SetEndObject(x, y - 1);
+                            AssignEndObject(x, y - 1);
                         }
                     }
                     if(endObject != null)
-                        SetValuesForMovement();                        
+                    {
+                        SetLerpValues();
+                        ObjectsMoving = true;
+                    }
                 }                
             }
         }
-        if (startObject != null && endObject != null)
-        {
-            ObjectsMoving = true;           
-            MoveThem();
+        if (startObject != null && endObject != null && ObjectsMoving)
+        {            
+            MoveSelectedObjects();
         }
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(startPos, endPos);
-    }
-    private void CheckLines()
-    {
-        var placeObjs = ItemPlacement._instance.placedObjects;
-        Sprite currentItem = null;
-
-        List<GameObject> objs = new List<GameObject>();
-        int currentIndex = 0;
-        int count = 0;
-
-        for (int y = 0; y < placeObjs.GetLength(1); y++)
-        {
-            for (int x = 0; x < placeObjs.GetLength(0); x++)
-            {
-                if(currentItem == null)
-                {
-                    currentItem = placeObjs[x, y].GetComponent<SpriteRenderer>().sprite;
-                    objs.Add(placeObjs[x, y]);
-                    currentIndex = 0;
-                    count = 1;
-                }
-                else
-                {
-                    if (currentItem == placeObjs[x,y].GetComponent<SpriteRenderer>().sprite)
-                    {
-                        objs.Add(placeObjs[x, y]);
-                        count++;
-                    }
-                    else
-                    {
-
-                    }
-                    currentIndex++;
-                }
-            }
-        }
-    }
-    private void SetEndObject(int xSet, int ySet)
+    }    
+    private void AssignEndObject(int xSet, int ySet) //Set endObject and its indexes for placeObject array
     {
         endX = xSet;
         endY = ySet;
         endObject = ItemPlacement._instance.placedObjects[endX, endY];
     }
-    public void SetValuesForMovement()
+    public void SetLerpValues()
     {
+        //If lerp used previously reset it
         current = 0;
 
-        tempStartPos = startObject.transform.position;
-        tempEndPos = endObject.transform.position;
+        //Set target posses for lerping
+        startObjTargetPos = startObject.transform.position;
+        endObjTargetPos = endObject.transform.position;
 
-        ItemPlacement._instance.placedObjects[x, y] = endObject;
-        ItemPlacement._instance.placedObjects[endX, endY] = startObject;
-
-        ItemPlacement._instance.placementAvailablity[x, y] = 1;
-        ItemPlacement._instance.placementAvailablity[endX, endY] = 1;
-
+        //We detecting x and y using object's name so change them too
         var tempName = startObject.name;
         startObject.name = endObject.name;
         endObject.name = tempName;
+
+        //Exchange placement in placedObject array
+        //RearrangeObjectArray();
     }
-    private void MoveThem()
-    {      
+    public void RearrangeObjectArray()
+    {
+        ItemPlacement._instance.placedObjects[x, y] = endObject;
+        ItemPlacement._instance.placedObjects[endX, endY] = startObject;
+
+        //ItemPlacement._instance.placementAvailablity[x, y] = 1;
+        //ItemPlacement._instance.placementAvailablity[endX, endY] = 1;
+    }
+    //Let item script know items movement done
+    public bool LerpingDone;
+    public bool testPassed;
+    private int resetCount = 0;
+    private void MoveSelectedObjects()
+    {        
         current = Mathf.MoveTowards(current, target, itemMovingSpeed * Time.deltaTime);
 
-        startObject.transform.position = Vector3.Lerp(startObject.transform.position, tempEndPos, current);
-        endObject.transform.position = Vector3.Lerp(endObject.transform.position, tempStartPos, current);
+        startObject.transform.position = Vector3.Lerp(startObject.transform.position, endObjTargetPos, current);
+        endObject.transform.position = Vector3.Lerp(endObject.transform.position, startObjTargetPos, current);
         
         if(current == target)
         {
-            //if (changesDone)
+            
+            if(resetCount < 1)
+            {
+                resetCount++;
+                LerpingDone = true;
+                //startObject.GetComponent<ItemScript>().Check();
+                //endObject.GetComponent<ItemScript>().Check();
+                //startObject.GetComponent<ItemScript>().objectSelected = true;
+                //endObject.GetComponent<ItemScript>().objectSelected = true;                
+
+                endObject.GetComponent<ItemScript>().CheckLines();
+            }
+            //else if(resetCount == 1)
             //{
-            //    ObjectsMoving = false;
-            //    startObject = endObject = null;
-            //    changesDone = false;
+            //    if (!LerpingDone)
+            //    {
+            //        if(testPassed)//Match found
+            //        {
+            //            RearrangeObjectArray();
+            //            ObjectsMoving = false;
+            //            startObject = endObject = null;
+            //        }
+            //        else //Match not found
+            //        {
+            //            SetLerpValues();
+            //            resetCount++;
+            //        }
+            //    }
             //}
             //else
             //{
-            //    SetValuesForMovement();
+            //    ObjectsMoving = false;
+            //    startObject = endObject = null;
             //}
-            ObjectsMoving = false;
-            startObject = endObject = null;
         }
     }
-    private float DirToAngleDeg(Vector2 v)
+    
+    private float DirToAngleDeg(Vector2 v)//Returns the angle to check the direction of movement
     {
         var angle = Mathf.Rad2Deg * Mathf.Atan2(v.y, v.x);
         if (angle < 0f)
