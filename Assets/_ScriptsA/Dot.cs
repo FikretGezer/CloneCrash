@@ -28,10 +28,14 @@ public class Dot : MonoBehaviour
     private SpriteRenderer mySprite;
 
     [Header("Powerup Stuff")]
+    public bool isColorBomb;
     public bool isColumnBomb;
     public bool isRowBomb;
+    public bool isAdjacentBomb;
     public GameObject rowArrow;
     public GameObject columnArrow;
+    public GameObject colorBomb;
+    public GameObject adjacentMarker;
     private void Start()
     {
         cam = Camera.main;
@@ -49,7 +53,10 @@ public class Dot : MonoBehaviour
         //prevRow = row;
         //prevColumn = column;
 
-        isColumnBomb = isRowBomb = false;
+        isColumnBomb = false;
+        isRowBomb = false;
+        isColorBomb = false;
+        isAdjacentBomb = false;        
     }
 
 
@@ -57,9 +64,9 @@ public class Dot : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(1))
         {
-            isRowBomb = true;
-            GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
-            arrow.transform.parent = this.transform;
+            isAdjacentBomb = true;
+            GameObject market = Instantiate(adjacentMarker, transform.position, Quaternion.identity);
+            market.transform.parent = this.transform;
 
             //isColumnBomb = true;
             //GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
@@ -69,12 +76,6 @@ public class Dot : MonoBehaviour
 
     private void Update()
     {      
-        /*
-        if(isMatched)
-        {
-            mySprite.color = Color.black;
-        }
-        */
         targetX = column;
         targetY = row;
         if(Mathf.Abs(targetX - transform.position.x) > 0.1f)
@@ -112,6 +113,17 @@ public class Dot : MonoBehaviour
     }
     private IEnumerator CheckMoveCor()
     {
+        if(isColorBomb)
+        {
+            matchFinder.MatchPiecesOfColor(otherDot.tag);
+            isMatched = true;
+        }
+        else if(otherDot.GetComponent<Dot>().isColorBomb)
+        {
+            matchFinder.MatchPiecesOfColor(gameObject.tag);
+            otherDot.GetComponent<Dot>().isMatched = true;
+        }
+
         yield return new WaitForSeconds(0.5f);
         if(otherDot != null)
         {
@@ -261,5 +273,17 @@ public class Dot : MonoBehaviour
         isColumnBomb = true;
         GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
         arrow.transform.parent = this.transform;
+    }
+    public void MakeColorBomb()
+    {
+        isColorBomb = true;
+        GameObject bomb = Instantiate(colorBomb, transform.position, Quaternion.identity);
+        bomb.transform.parent = this.transform;
+    }
+    public void MakeAdjacentBomb()
+    {
+        isAdjacentBomb = true;
+        GameObject marker = Instantiate(adjacentMarker, transform.position, Quaternion.identity);
+        marker.transform.parent = this.transform;
     }
 }

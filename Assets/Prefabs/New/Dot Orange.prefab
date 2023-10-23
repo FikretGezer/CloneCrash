@@ -151,9 +151,16 @@ MonoBehaviour:
   targetX: 0
   targetY: 0
   isMatched: 0
+  otherDot: {fileID: 0}
+  isColorBomb: 0
   isColumnBomb: 0
   isRowBomb: 0
+  isAdjacentBomb: 0
   rowArrow: {fileID: 3639607408050420437, guid: 58c35aa2c5c71094686c69ccd438d594,
     type: 3}
   columnArrow: {fileID: 6930492491878699200, guid: 4275cfc9df98578469ac2ef3896167b0,
+    type: 3}
+  colorBomb: {fileID: 2408040392507052414, guid: aa65e3623fadfb648ba82ebb8dc5ba9d,
+    type: 3}
+  adjacentMarker: {fileID: 4500818884832710124, guid: 266abfa35e1676846a09cc21f9fe45be,
     type: 3}

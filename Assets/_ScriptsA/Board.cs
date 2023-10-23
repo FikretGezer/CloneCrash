@@ -101,6 +101,97 @@ public class Board : MonoBehaviour
         }
         return false;
     }
+    private bool ColumnOrRow()
+    {
+        int numberHor = 0;
+        int numberVer = 0;
+
+        Dot firstPiece = matchFinder.currentMatches[0].GetComponent<Dot>();
+        if(firstPiece != null)
+        {
+            foreach (var currentPiece in matchFinder.currentMatches)
+            {
+                Dot dot = currentPiece.GetComponent<Dot>();
+                if (dot.row == firstPiece.row)
+                    numberHor++;
+                if (dot.column == firstPiece.column)
+                    numberVer++;
+            }
+        }
+        return (numberVer == 5 || numberHor == 5);
+    }
+    private void CheckToMakeBombs()
+    {
+        if (matchFinder.currentMatches.Count == 4
+         || matchFinder.currentMatches.Count == 7)
+        {
+            matchFinder.CheckBombs();
+        }
+        if (matchFinder.currentMatches.Count == 5
+         || matchFinder.currentMatches.Count == 8)
+        {
+            if(ColumnOrRow())
+            {
+                //Make a color bomb
+                if(currentDot != null)
+                {
+                    if(currentDot.isMatched)
+                    {
+                        if(!currentDot.isColorBomb)
+                        {
+                            currentDot.isMatched = false;
+                            currentDot.MakeColorBomb();
+                        }
+                    }
+                    else 
+                    {
+                        if(currentDot.otherDot != null)
+                        {
+                            Dot otherDot = currentDot.otherDot.GetComponent<Dot>();
+                            if (otherDot.isMatched)
+                            {
+                                if (!otherDot.isColorBomb)
+                                {
+                                    otherDot.isMatched = false;
+                                    otherDot.MakeColorBomb();
+                                }
+                            }
+                        }
+                    }
+                }                
+            }
+            else
+            {
+                //Make a adjacent bomb
+                if (currentDot != null)
+                {
+                    if (currentDot.isMatched)
+                    {
+                        if (!currentDot.isAdjacentBomb)
+                        {
+                            currentDot.isMatched = false;
+                            currentDot.MakeAdjacentBomb();
+                        }
+                    }
+                    else
+                    {
+                        if (currentDot.otherDot != null)
+                        {
+                            Dot otherDot = currentDot.otherDot.GetComponent<Dot>();
+                            if (otherDot.isMatched)
+                            {
+                                if (!otherDot.isAdjacentBomb)
+                                {
+                                    otherDot.isMatched = false;
+                                    otherDot.MakeAdjacentBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     private void DestroyMatchesAt(int column, int row)
     {
         if (allDots[column, row].GetComponent<Dot>().isMatched)
@@ -109,14 +200,13 @@ public class Board : MonoBehaviour
             //{
             //    matchFinder.currentMatches.Remove(allDots[column, row]);
             //}
-            if (matchFinder.currentMatches.Count == 4 
-                || matchFinder.currentMatches.Count == 7)
+            if (matchFinder.currentMatches.Count >= 4)
             {
-                matchFinder.CheckBombs();
+                CheckToMakeBombs();
             }
             GameObject effect = Instantiate(destroyEffect, allDots[column, row].transform.position, Quaternion.identity);
             Destroy(effect, 1f);
-            matchFinder.currentMatches.Remove(allDots[column, row]);
+            //matchFinder.currentMatches.Remove(allDots[column, row]);
             Destroy(allDots[column, row]);
             allDots[column, row] = null;
         }       
@@ -132,7 +222,8 @@ public class Board : MonoBehaviour
                     DestroyMatchesAt(x, y);
                 }
             }
-        }        
+        }
+        matchFinder.currentMatches.Clear();
         StartCoroutine(nameof(DecreaseRowCo));
     }
     private IEnumerator DecreaseRowCo()
