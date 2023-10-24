@@ -164,8 +164,8 @@ public class Dot : MonoBehaviour
 
             if (dirLength > 0.011f)
             {
-                MovePieces();
                 board.gameState = GameState.wait;
+                MovePieces();
                 board.currentDot = this;
             }
         }
@@ -183,53 +183,51 @@ public class Dot : MonoBehaviour
         }
         return angle;
     }
-    private void MovePieces()
+    void MovePiecesActual(Vector2 dir)
     {
-        if((swipeAngle < 45f && swipeAngle >= 0f) || (swipeAngle > 315f && swipeAngle < 360f) && column < board.width - 1)//Swipe RIGHT
+        otherDot = board.allDots[column + (int)dir.x, row + (int)dir.y];
+        if (otherDot != null)
         {
-            otherDot = board.allDots[column + 1, row];
-            if (otherDot != null)
+            prevColumn = column;
+            prevRow = row;
+
+            if(otherDot != null)
             {
-                prevRow = row;
-                prevColumn = column;
-                otherDot.GetComponent<Dot>().column -= 1;
-                column += 1;
+                otherDot.GetComponent<Dot>().column += -1 * (int)dir.x;
+                otherDot.GetComponent<Dot>().row += -1 * (int)dir.y;
+
+                column += (int)dir.x;
+                row += (int)dir.y;
+
+                StartCoroutine(nameof(CheckMoveCor));
+            }
+            else
+            {
+                board.gameState = GameState.move;
             }
         }
+    }
+    private void MovePieces()
+    {
+        if ((swipeAngle < 45f && swipeAngle >= 0f) || (swipeAngle > 315f && swipeAngle < 360f) && column < board.width - 1)//Swipe RIGHT
+        {            
+            MovePiecesActual(Vector2.right);
+        }
         else if (swipeAngle > 45f && swipeAngle <= 135f && row < board.height - 1)//Swipe UP
-        {
-            otherDot = board.allDots[column, row + 1];
-            if (otherDot != null)
-            {
-                prevRow = row;
-                prevColumn = column;
-                otherDot.GetComponent<Dot>().row -= 1;
-                row += 1;
-            }
+        {            
+            MovePiecesActual(Vector2.up);
         }
         else if (swipeAngle > 135f && swipeAngle <= 225f && column > 0)//Swipe LEFT
         {
-            otherDot = board.allDots[column - 1, row];
-            if(otherDot != null)
-            {
-                prevRow = row;
-                prevColumn = column;
-                otherDot.GetComponent<Dot>().column += 1;
-                column -= 1;
-            }
+            MovePiecesActual(Vector2.left);
         }
         else if (swipeAngle > 225f && swipeAngle <= 315f && row > 0)//Swipe DOWN
         {
-            otherDot = board.allDots[column, row - 1];
-            if(otherDot != null)
-            {
-                prevRow = row;
-                prevColumn = column;
-                otherDot.GetComponent<Dot>().row += 1;
-                row -= 1;
-            }
+            MovePiecesActual(Vector2.down);
         }
-        StartCoroutine(nameof(CheckMoveCor));
+        else
+            board.gameState = GameState.move;
+        
     }
     private void FindMatches()
     {

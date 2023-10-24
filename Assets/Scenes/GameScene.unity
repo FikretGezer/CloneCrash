@@ -199,12 +199,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState: 1
   lerpSpeed: 5
-  width: 5
-  height: 10
+  width: 3
+  height: 3
   offset: 20
   destroyEffect: {fileID: 6069571153146400126, guid: 8ff94636803a6ef43a53288f3b599c55,
     type: 3}
   tilePrefab: {fileID: 4674664986913086872, guid: 75c398e00e9562745be8d5c8e3d8d708,
+    type: 3}
+  breakableTilePrefab: {fileID: 549382634649657394, guid: 34926abfc6a9021408c7a85f1e304995,
     type: 3}
   dotPrefabs:
   - {fileID: 5805121100341089054, guid: 20df7d23f5f6c534298d9303e0e7d3ea, type: 3}
@@ -213,6 +215,7 @@ MonoBehaviour:
   - {fileID: 4584767421260544454, guid: cd1243e40a760094e9f4bfbc633622d7, type: 3}
   - {fileID: 5668212960913527306, guid: 4b9a694bd33755146864cf3e542018b9, type: 3}
   - {fileID: 4831883154059212165, guid: 5eadea2de539f31468d240ce5685552f, type: 3}
+  boardLayout: []
   currentDot: {fileID: 0}
 --- !u!4 &1573642420
 Transform:
@@ -359,6 +362,7 @@ GameObject:
   - component: {fileID: 1920543464}
   - component: {fileID: 1920543463}
   - component: {fileID: 1920543466}
+  - component: {fileID: 1920543467}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -484,6 +488,22 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &1920543467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920543462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7355dec5ee696b34e919d140abc96f3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraOffset: -10
+  aspectRatio: 0.5625
+  padding: 2
+  aspect: {x: 9, y: 16}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
