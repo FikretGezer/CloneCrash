@@ -18,9 +18,12 @@ public class Dot : MonoBehaviour
     public bool isMatched;
 
     private Vector2 tempPos;
+    private float dirLength;
 
     private Board board;
     private MatchFinder matchFinder;
+    private HintManager hintManager;
+
     public GameObject otherDot;
     private Vector2 firstTouchPos;
     private Vector2 lastTouchPos;
@@ -43,6 +46,7 @@ public class Dot : MonoBehaviour
 
         board = FindObjectOfType<Board>();
         matchFinder = FindObjectOfType<MatchFinder>();
+        hintManager = FindObjectOfType<HintManager>();        
 
         //targetX = (int)transform.position.x;
         //targetY = (int)transform.position.y;
@@ -146,11 +150,17 @@ public class Dot : MonoBehaviour
         }
         
     }
-    private float dirLength;
     private void OnMouseDown()
-    {     
+    {    
+        if(hintManager != null)
+        {
+            hintManager.DestroyHint();
+            //hintManager.ResetDelayCount();
+        }
+
         if(board.gameState == GameState.move)
             firstTouchPos = cam.ScreenPointToRay(Input.mousePosition).origin;
+        
     }
     private void OnMouseUp()
     {
@@ -277,6 +287,7 @@ public class Dot : MonoBehaviour
         isColorBomb = true;
         GameObject bomb = Instantiate(colorBomb, transform.position, Quaternion.identity);
         bomb.transform.parent = this.transform;
+        this.gameObject.tag = "ColorBomb";
     }
     public void MakeAdjacentBomb()
     {

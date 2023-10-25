@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class MatchFinder : MonoBehaviour
 {
@@ -56,7 +57,6 @@ public class MatchFinder : MonoBehaviour
 
         return currentDots;
     }
-
     private void GetNearbyPieces(GameObject dot1, GameObject dot2, GameObject dot3)
     {
         AddMatchToTheList(dot1);        
@@ -130,7 +130,6 @@ public class MatchFinder : MonoBehaviour
         }
         matchObj.GetComponent<Dot>().isMatched = true;
     }
-
     public void MatchPiecesOfColor(string color)
     {
         for (int x = 0; x < board.width; x++)
@@ -147,7 +146,6 @@ public class MatchFinder : MonoBehaviour
             }
         }
     }
-
     private List<GameObject> GetAdjacentPieces(int column, int row)
     {
         var dots = new List<GameObject>();
@@ -157,14 +155,16 @@ public class MatchFinder : MonoBehaviour
             {
                 if(x >= 0 && x < board.width && y >= 0 && y < board.height)
                 {
-                    dots.Add(board.allDots[x, y]);
-                    board.allDots[x, y].GetComponent<Dot>().isMatched = true;
+                    if (board.allDots[x, y] != null)
+                    {
+                        dots.Add(board.allDots[x, y]);
+                        board.allDots[x, y].GetComponent<Dot>().isMatched = true;
+                    }
                 }
             }
         }
         return dots;
     }
-
     private List<GameObject> GetColumnPieces(int column)
     {
         var dots = new List<GameObject>();
@@ -172,8 +172,18 @@ public class MatchFinder : MonoBehaviour
         {
             if (board.allDots[column, y] != null)
             {
-                dots.Add(board.allDots[column, y]);
-                board.allDots[column, y].GetComponent<Dot>().isMatched = true;
+                Dot dot = board.allDots[column, y].GetComponent<Dot>();
+
+                if (dot.isRowBomb)
+                {
+                    dots.Union(GetRowPieces(y)).ToList();
+                }
+
+                dots.Add(dot.gameObject);
+                dot.GetComponent<Dot>().isMatched = true;
+
+                //dots.Add(board.allDots[column, y]);
+                //board.allDots[column, y].GetComponent<Dot>().isMatched = true;
             }
         }
         return dots;
@@ -185,8 +195,18 @@ public class MatchFinder : MonoBehaviour
         {
             if (board.allDots[x, row] != null)
             {
-                dots.Add(board.allDots[x, row]);
-                board.allDots[x, row].GetComponent<Dot>().isMatched = true;
+                Dot dot = board.allDots[x, row].GetComponent<Dot>();
+
+                if (dot.isColumnBomb)
+                {
+                    dots.Union(GetRowPieces(x)).ToList();
+                }
+
+                dots.Add(dot.gameObject);
+                dot.isMatched = true;
+
+                //dots.Add(board.allDots[x, row]);
+                //board.allDots[x, row].GetComponent<Dot>().isMatched = true;
             }
         }
         return dots;
@@ -202,7 +222,9 @@ public class MatchFinder : MonoBehaviour
                 curDot.isMatched = false;
 
                 if((curDot.swipeAngle < 45f && curDot.swipeAngle >= 0f) || (curDot.swipeAngle > 315f && curDot.swipeAngle < 360f)
-                || (curDot.swipeAngle > 135f && curDot.swipeAngle <= 225f))
+                || (curDot.swipeAngle > 45f && curDot.swipeAngle <= 135f)
+                || (curDot.swipeAngle > 135f && curDot.swipeAngle <= 225f)
+                || (curDot.swipeAngle > 225f && curDot.swipeAngle <= 315))
                 {
                     curDot.MakeRowBomb();
                 }
@@ -220,8 +242,10 @@ public class MatchFinder : MonoBehaviour
 
                     //if ((otherDot.swipeAngle < 45f && otherDot.swipeAngle >= 0f) || (otherDot.swipeAngle > 315f && otherDot.swipeAngle < 360f)
                     //|| (otherDot.swipeAngle > 135f && otherDot.swipeAngle <= 225f))
-                    if ((curDot.swipeAngle < 45f && curDot.swipeAngle >= 0f) || (curDot.swipeAngle > 315f && curDot.swipeAngle < 360f)
-                    || (curDot.swipeAngle > 135f && curDot.swipeAngle <= 225f))
+                    if ((otherDot.swipeAngle < 45f && otherDot.swipeAngle >= 0f) || (otherDot.swipeAngle > 315f && otherDot.swipeAngle < 360f)
+                    || (otherDot.swipeAngle > 45f && otherDot.swipeAngle <= 135f)
+                    || (otherDot.swipeAngle > 135f && otherDot.swipeAngle <= 225f)
+                    || (otherDot.swipeAngle > 225f && otherDot.swipeAngle <= 315))
                     {
                         otherDot.MakeRowBomb();
                     }

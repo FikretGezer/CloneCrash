@@ -10,6 +10,7 @@ public class CameraSizer : MonoBehaviour
     public float cameraOffset = -10f;
     public float aspectRatio = 9f / 16f;
     public float padding = 2;
+    public float yOffset;
     public Vector2 aspect;
     private void Awake()
     {
@@ -24,7 +25,7 @@ public class CameraSizer : MonoBehaviour
     private void RepositionCamera()
     {
         float centerX = board.width / 2;
-        float centerY = board.height / 2 - 0.5f;
+        float centerY = board.height / 2 - 0.5f + yOffset;
 
         transform.position = new Vector3(centerX, centerY, cameraOffset);
 

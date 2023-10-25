@@ -10,6 +10,7 @@ TagManager:
   - Dot Red
   - Dot Blue
   - Dot Yellow
+  - ColorBomb
   layers:
   - Default
   - TransparentFX
