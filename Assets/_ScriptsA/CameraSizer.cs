@@ -12,7 +12,7 @@ public class CameraSizer : MonoBehaviour
     public float padding = 2;
     public float yOffset;
     public Vector2 aspect;
-    private void Awake()
+    private void Start()
     {
         _camera = GetComponent<Camera>();
         board = FindObjectOfType<Board>();
@@ -22,10 +22,18 @@ public class CameraSizer : MonoBehaviour
         if(board != null)
             RepositionCamera();
     }
+    private void Update()
+    {
+        if (board != null)
+            RepositionCamera();
+    }
     private void RepositionCamera()
     {
         float centerX = board.width / 2;
-        float centerY = board.height / 2 - 0.5f + yOffset;
+        float centerY = board.height / 2 + yOffset;
+
+        if (board.width % 2 == 0)
+            centerX -= 0.5f;
 
         transform.position = new Vector3(centerX, centerY, cameraOffset);
 

@@ -1,7 +1,6 @@
 using Assets._ScriptsA;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum GameState
@@ -25,6 +24,11 @@ public class TileType
 
 public class Board : MonoBehaviour
 {
+    [Header("Scriptable Stuff")]
+    public World world;
+    public int level;
+
+    [Header("Other Stuff")]
     public GameState gameState = GameState.move;
     public float lerpSpeed = 1f;
     public int width;
@@ -50,10 +54,16 @@ public class Board : MonoBehaviour
     private MatchFinder matchFinder;
     private ScoreManager scoreManager;
     private SoundManager soundManager;
-    
 
+    private void Awake()
+    {
+    }
     private void Start()
     {
+        if (PlayerPrefs.HasKey("Selected Level"))
+            level = PlayerPrefs.GetInt("Selected Level");
+        SelectLevel();   
+        
         matchFinder = FindObjectOfType<MatchFinder>();
         scoreManager = FindObjectOfType<ScoreManager>();
         soundManager = FindObjectOfType<SoundManager>();
@@ -63,7 +73,28 @@ public class Board : MonoBehaviour
         allDots = new GameObject[width, height];
         Setup();
     }
+    private void SelectLevel()
+    {
+        if(world != null)
+        {
+            if(world.levels.Length > 0)
+            {
+                if (world.levels[level] != null)
+                {
+                    Level currentLevel = world.levels[level];
+                    //Board size
+                    width = currentLevel.width;
+                    height = currentLevel.height;
 
+                    //Board objects
+                    dotPrefabs = currentLevel.dotPrefabs;
+
+                    //Board layouts
+                    boardLayout = currentLevel.boardLayout;
+                }
+            }
+        }
+    }
     public void GenerateBlankSpaces()
     {
         for (int i = 0; i < boardLayout.Length; i++)
