@@ -14,9 +14,8 @@ public class SaveData
 public class GameData : MonoBehaviour
 {
     public static GameData Instance;
-    public SaveData saveData;
+    public SaveData saveData;  
     
-
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -60,9 +59,20 @@ public class GameData : MonoBehaviour
             file.Close();
             Debug.Log("Loaded");
         }
+        else
+        {
+            saveData = new SaveData();
+            saveData.isActive = new bool[100];
+            saveData.isActive[0] = true;
+        }
     }
     private void OnDisable()
     {
         Save();
     }
+    private void OnApplicationQuit()
+    {
+        Save();
+    }
+
 }

@@ -11,6 +11,7 @@ TagManager:
   - Dot Blue
   - Dot Yellow
   - ColorBomb
+  - Board
   layers:
   - Default
   - TransparentFX

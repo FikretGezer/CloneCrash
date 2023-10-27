@@ -65,7 +65,8 @@ public class MatchFinder : MonoBehaviour
     }
     private IEnumerator FindAllMatches()
     {
-        yield return new WaitForSeconds(0.2F);
+        //yield return new WaitForSeconds(0.2F);
+        yield return null;
         for (int x = 0; x < board.width; x++)
         {
             for (int y = 0; y < board.height; y++)
@@ -211,13 +212,13 @@ public class MatchFinder : MonoBehaviour
         }
         return dots;
     }
-    public void CheckBombs()
+    public void CheckBombs(MatchType matchType)
     {
         if(board.currentDot != null)
         {
             var curDot = board.currentDot;
             
-            if (curDot.isMatched)
+            if (curDot.isMatched && curDot.CompareTag(matchType.color))
             {
                 curDot.isMatched = false;
 
@@ -236,7 +237,7 @@ public class MatchFinder : MonoBehaviour
             else if (board.currentDot.otherDot != null)
             {
                 var otherDot = board.currentDot.otherDot.GetComponent<Dot>();
-                if (otherDot.isMatched)
+                if (otherDot.isMatched && otherDot.CompareTag(matchType.color))
                 {
                     otherDot.isMatched = false;
 
