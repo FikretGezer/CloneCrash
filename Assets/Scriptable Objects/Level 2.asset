@@ -16,10 +16,17 @@ MonoBehaviour:
   height: 8
   boardLayout: []
   dotPrefabs:
-  - {fileID: 5805121100341089054, guid: 3c879d51c6d012444916674eadb83172, type: 3}
-  - {fileID: 7476349946724059991, guid: 21ea59df4e3a63647b9d1b3657338871, type: 3}
-  - {fileID: 1441688626323073661, guid: 21489048b5e96614cbf0f12de4823cf4, type: 3}
-  - {fileID: 4584767421260544454, guid: 8369c8632bd80244abcee6b26fa17e79, type: 3}
-  - {fileID: 5668212960913527306, guid: be6aff4dc758ea6429b44fcedab0cbba, type: 3}
-  - {fileID: 4831883154059212165, guid: f558a120fa844504686fd8493f5ff636, type: 3}
+  - {fileID: 7476349946724059991, guid: 7a407e7f85981404dbeb3bd6c34e7d74, type: 3}
+  - {fileID: 1441688626323073661, guid: 7b203a777ceb3fb49998db05fe172925, type: 3}
+  - {fileID: 5805121100341089054, guid: 3d7e2fae9af6f0e49b17f788c2fdb857, type: 3}
+  - {fileID: 4584767421260544454, guid: 27dee4f0294a3534b91a794f9c6eaf31, type: 3}
+  - {fileID: 5668212960913527306, guid: cdb67bcd6ed64034f9eae0187e9747bd, type: 3}
+  - {fileID: 4831883154059212165, guid: 04e42630cb361a2429959219a3e9ebbb, type: 3}
   scoreGoal: 180
+  goals:
+  - goalSprite: {fileID: 21300000, guid: 9714225def7bdda4db9701c923085262, type: 3}
+    goalCount: 10
+    tag: Dot Blue
+  - goalSprite: {fileID: 21300000, guid: 1edbb3ceb4a88954f9c241c1b0572b1d, type: 3}
+    goalCount: 5
+    tag: Dot Orange

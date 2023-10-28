@@ -73,9 +73,6 @@ public class Board : MonoBehaviour
     private ScoreManager scoreManager;
     private SoundManager soundManager;
 
-    private void Awake()
-    {
-    }
     private void Start()
     {
         if (PlayerPrefs.HasKey("Selected Level"))
@@ -171,7 +168,7 @@ public class Board : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                if (!blankSpaces[x, y] && !concreteTiles[x, y])
+                if (!blankSpaces[x, y] /*&& !concreteTiles[x, y]*/)
                 {
                     var tempPos = new Vector2(x, y + offset);
                     var tilePos = new Vector2(x, y);
@@ -179,21 +176,24 @@ public class Board : MonoBehaviour
                     tile.transform.parent = transform;
                     tile.name = $"( {x}, {y} )";
 
-                    GameObject selectedPrefab = dotPrefabs[Random.Range(0, dotPrefabs.Length)];
-                    int maxIterations = 0;
-                    while (MatchesAt(x,y,selectedPrefab) && maxIterations < 100)
+                    if(!concreteTiles[x, y])
                     {
-                        selectedPrefab = dotPrefabs[Random.Range(0, dotPrefabs.Length)];
-                        maxIterations++;
-                    }
-                    Debug.Log(maxIterations);
+                        GameObject selectedPrefab = dotPrefabs[Random.Range(0, dotPrefabs.Length)];
+                        int maxIterations = 0;
+                        while (MatchesAt(x,y,selectedPrefab) && maxIterations < 100)
+                        {
+                            selectedPrefab = dotPrefabs[Random.Range(0, dotPrefabs.Length)];
+                            maxIterations++;
+                        }
+                        Debug.Log(maxIterations);
 
-                    var dot = Instantiate(selectedPrefab, tempPos, Quaternion.identity);
-                    dot.GetComponent<Dot>().column = x;
-                    dot.GetComponent<Dot>().row = y;
-                    dot.transform.parent = transform;
-                    dot.name = tile.name;
-                    allDots[x, y] = dot;
+                        var dot = Instantiate(selectedPrefab, tempPos, Quaternion.identity);
+                        dot.GetComponent<Dot>().column = x;
+                        dot.GetComponent<Dot>().row = y;
+                        dot.transform.parent = transform;
+                        dot.name = tile.name;
+                        allDots[x, y] = dot;
+                    }
                 }
 
             }
@@ -500,12 +500,40 @@ public class Board : MonoBehaviour
             }
 
             GameObject effect = Instantiate(destroyEffect, allDots[column, row].transform.position, Quaternion.identity);
+            var name = allDots[column, row].gameObject.tag.Split(" ");
+            if (name.Length > 1)
+            {
+                var p = effect.GetComponent<ParticleSystem>().main;
+                p.startColor = new ParticleSystem.MinMaxGradient(StringToColor(name[1]));
+            }
             Destroy(effect, 1f);
             //matchFinder.currentMatches.Remove(allDots[column, row]);
             Destroy(allDots[column, row]);
             scoreManager.IncreaseScore(basePieceValue * streakValue);
+            scoreManager.CheckObjectives(allDots[column, row]);
             allDots[column, row] = null;
         }       
+    }
+    Color StringToColor(string colorName)
+    {
+        colorName = colorName.ToLower(); // Convert the color name to lowercase for case insensitivity
+
+        switch (colorName)
+        {
+            case "red":
+                return Color.red;
+            case "blue":
+                return Color.cyan;
+            case "green":
+                return Color.green;
+            case "orange":
+                return new Color(1, 0.498f, 0.314f, 1f);
+            case "purple":
+                return new Color(0.5f, 0f, 0.5f, 1f); 
+            // Add more cases as needed
+            default:
+                return Color.white; // Return a default color if the input is not recognized
+        }
     }
     public void DestroyMatches()
     {
@@ -814,6 +842,40 @@ public class Board : MonoBehaviour
         if(IsDeadLocked())
         {
             ShuffleBoard();
+        }
+    }
+    public void BombRow(int row)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (concreteTiles[x, y])
+                {
+                    concreteTiles[x, row].TakeDamage(1);
+                    if (concreteTiles[x, row].hitPoints <= 0)
+                    {
+                        concreteTiles[x, row] = null;
+                    }
+                }
+            }
+        }
+    }
+    public void BombColumn(int column)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (concreteTiles[x, y])
+                {
+                    concreteTiles[column, y].TakeDamage(1);
+                    if (concreteTiles[column, y].hitPoints <= 0)
+                    {
+                        concreteTiles[column, y] = null;
+                    }
+                }
+            }
         }
     }
 }

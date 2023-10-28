@@ -4,23 +4,28 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class SaveData
 {
     public bool[] isActive;
+    public int currentPageForLevels = 0;
 }
 public class GameData : MonoBehaviour
 {
     public static GameData Instance;
-    public SaveData saveData;  
+    public World world;
+    public SaveData saveData;
+    public int levelsPerPage = 8;
     
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        DontDestroyOnLoad(this);
         Load();
+        //DontDestroyOnLoad(this);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
     }
     
     public void Save()
@@ -35,8 +40,19 @@ public class GameData : MonoBehaviour
         else
             File.Open(Application.persistentDataPath + "/player.dat", FileMode.Create);
 
+        int lastActive()
+        {
+            for (int i = 0; i < saveData.isActive.Length; i++)
+            {
+                if (!saveData.isActive[i])
+                    return i - 1;
+            }
+            return 0;
+        };
 
-        //Create a copy of the save data
+        saveData.currentPageForLevels = lastActive() / levelsPerPage;
+
+        //Create a copy of the save data        
         SaveData data = new SaveData();
         data = saveData;
 
@@ -64,6 +80,16 @@ public class GameData : MonoBehaviour
             saveData = new SaveData();
             saveData.isActive = new bool[100];
             saveData.isActive[0] = true;
+            saveData.currentPageForLevels = 0;
+        }
+    }
+    public void IncreaseLastLevel(Board board)
+    {
+        if (board.level + 1 < saveData.isActive.Length 
+            && board.level + 1 < world.levels.Length
+            && world.levels[board.level + 1] != null)
+        {
+            saveData.isActive[board.level + 1] = true;
         }
     }
     private void OnDisable()

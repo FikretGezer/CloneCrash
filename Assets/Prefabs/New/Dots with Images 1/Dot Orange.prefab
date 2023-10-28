@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1207884456802742731}
   - component: {fileID: -9033282016249389967}
   m_Layer: 0
-  m_Name: Dot Blue
+  m_Name: Dot Orange
   m_TagString: Dot Orange
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

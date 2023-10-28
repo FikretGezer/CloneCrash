@@ -12,6 +12,10 @@ TagManager:
   - Dot Yellow
   - ColorBomb
   - Board
+  - Dot White
+  - breakable
+  - lock
+  - colorful
   layers:
   - Default
   - TransparentFX

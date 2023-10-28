@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a62d4bd97e586d3429e1ef646ad356f7, type: 3}
-  m_Name: Level 1
+  m_Name: Level 5
   m_EditorClassIdentifier: 
   width: 5
   height: 10
@@ -46,11 +46,14 @@ MonoBehaviour:
     y: 5
     tileKind: 3
   dotPrefabs:
-  - {fileID: 7476349946724059991, guid: 7a407e7f85981404dbeb3bd6c34e7d74, type: 3}
-  - {fileID: 1441688626323073661, guid: 7b203a777ceb3fb49998db05fe172925, type: 3}
-  - {fileID: 5805121100341089054, guid: 3d7e2fae9af6f0e49b17f788c2fdb857, type: 3}
+  - {fileID: 5805121100341089054, guid: 3c879d51c6d012444916674eadb83172, type: 3}
+  - {fileID: 7476349946724059991, guid: 21ea59df4e3a63647b9d1b3657338871, type: 3}
+  - {fileID: 1441688626323073661, guid: 21489048b5e96614cbf0f12de4823cf4, type: 3}
+  - {fileID: 4584767421260544454, guid: 8369c8632bd80244abcee6b26fa17e79, type: 3}
+  - {fileID: 5668212960913527306, guid: be6aff4dc758ea6429b44fcedab0cbba, type: 3}
+  - {fileID: 4831883154059212165, guid: f558a120fa844504686fd8493f5ff636, type: 3}
   scoreGoal: 120
   goals:
-  - goalSprite: {fileID: 21300000, guid: 9714225def7bdda4db9701c923085262, type: 3}
-    goalCount: 50
+  - goalSprite: {fileID: 21300000, guid: 1edbb3ceb4a88954f9c241c1b0572b1d, type: 3}
+    goalCount: 15
     tag: Dot Blue

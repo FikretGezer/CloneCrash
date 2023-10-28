@@ -14,8 +14,9 @@ public class InGameButtonFunctions : MonoBehaviour
     {
         if(board != null)
         {
-            GameData.Instance.saveData.isActive[board.level + 1] = true;
-            GameData.Instance.Save();
+            //GameData.Instance.saveData.isActive[board.level + 1] = true;
+            //GameData.Instance.Save();
+            GameData.Instance.IncreaseLastLevel(board);
             SceneManager.LoadScene("Menu");
         }
     }

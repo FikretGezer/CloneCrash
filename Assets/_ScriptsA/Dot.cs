@@ -230,6 +230,7 @@ public class Dot : MonoBehaviour
         }
 
     }
+    
     private void MovePieces()
     {
         if ((swipeAngle < 45f && swipeAngle >= 0f) || (swipeAngle > 315f && swipeAngle < 360f) && column < board.width - 1)//Swipe RIGHT
@@ -290,6 +291,22 @@ public class Dot : MonoBehaviour
             isRowBomb = true;
             GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
             arrow.transform.parent = this.transform;        
+        }
+    }
+    public void MakeRowBombColor()
+    {
+        if (!isColumnBomb && !isColorBomb && !isAdjacentBomb)
+        {
+            isRowBomb = true;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        }
+    }
+    public void MakeColumnBombColor()
+    {
+        if (!isRowBomb && !isColorBomb && !isAdjacentBomb)
+        {
+            isColumnBomb = true;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.blue;            
         }
     }
     public void MakeColumnBomb()
