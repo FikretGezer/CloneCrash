@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7733230793289275279}
   - component: {fileID: 2120890947988597750}
   - component: {fileID: -7223868209255971619}
+  - component: {fileID: 1888714749689231170}
   - component: {fileID: 1206321734086520522}
   m_Layer: 0
   m_Name: Dot Purple
@@ -131,6 +132,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!95 &1888714749689231170
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4584767421260544454}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 194bc289a5fbbf442a7c71140afb6caa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1206321734086520522
 MonoBehaviour:
   m_ObjectHideFlags: 0

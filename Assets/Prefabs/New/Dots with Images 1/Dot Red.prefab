@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3385419044473444920}
   - component: {fileID: 3118938918971695437}
   - component: {fileID: -7644326566064277569}
+  - component: {fileID: -4034707238639910219}
   - component: {fileID: 7803239356338437050}
   m_Layer: 0
   m_Name: Dot Red
@@ -131,6 +132,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!95 &-4034707238639910219
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5668212960913527306}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a3d8f47f4a3972546b9c9587932ce9c0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7803239356338437050
 MonoBehaviour:
   m_ObjectHideFlags: 0

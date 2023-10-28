@@ -367,6 +367,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: particle
       objectReference: {fileID: 0}
+    - target: {fileID: 6378503011998066347, guid: b76808b18cc69f44c81ac147b764d422,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

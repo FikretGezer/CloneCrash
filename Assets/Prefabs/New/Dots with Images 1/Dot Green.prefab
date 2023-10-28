@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5269473823098410470}
   - component: {fileID: 7519871272495663776}
   - component: {fileID: -4097695524906979182}
+  - component: {fileID: -5097337831279371195}
   - component: {fileID: 3946354165404196749}
   m_Layer: 0
   m_Name: Dot Green
@@ -131,6 +132,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!95 &-5097337831279371195
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441688626323073661}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bc08c7bcd893587439781780857b7955, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3946354165404196749
 MonoBehaviour:
   m_ObjectHideFlags: 0
