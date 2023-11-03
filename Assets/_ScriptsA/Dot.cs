@@ -172,7 +172,7 @@ public class Dot : MonoBehaviour
         { 
             lastTouchPos = cam.ScreenPointToRay(Input.mousePosition).origin;
 
-            var dir = (lastTouchPos - firstTouchPos);
+            var dir = lastTouchPos - firstTouchPos;
             dirLength = dir.magnitude;
             swipeAngle = DirToAngleDeg(dir);
 

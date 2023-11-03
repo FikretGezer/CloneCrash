@@ -16,6 +16,12 @@ TagManager:
   - breakable
   - lock
   - colorful
+  - Dot Cat
+  - Dot Lizard
+  - Dot Octopus
+  - Dot Owl
+  - Dot Pig
+  - Dot Rabbit
   layers:
   - Default
   - TransparentFX
@@ -23,7 +29,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Pieces
   - 
   - 
   - 

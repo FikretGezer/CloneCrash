@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraSizer : MonoBehaviour
@@ -12,6 +10,7 @@ public class CameraSizer : MonoBehaviour
     public float padding = 2;
     public float yOffset;
     public Vector2 aspect;
+    public bool resizeOnUpdate;
     private void Start()
     {
         _camera = GetComponent<Camera>();
@@ -21,11 +20,33 @@ public class CameraSizer : MonoBehaviour
 
         if(board != null)
             RepositionCamera();
+        if(FindObjectOfType<ItemSpawnManager>() != null)
+            RepositionCam();
     }
     private void Update()
     {
         if (board != null)
             RepositionCamera();
+        if (FindObjectOfType<ItemSpawnManager>() != null && resizeOnUpdate)
+            RepositionCam();
+    }
+    private void RepositionCam()
+    {
+        int width = ItemSpawnManager.Instance.boardWidth;
+        int height = ItemSpawnManager.Instance.boardHeight;
+
+        float centerX = width / 2;
+        float centerY = height / 2 + yOffset;
+
+        if (width % 2 == 0)
+            centerX -= 0.5f;
+
+        transform.position = new Vector3(centerX, centerY, cameraOffset);
+
+        if (width >= height)
+            _camera.orthographicSize = (width / 2f + padding) / aspectRatio;
+        else
+            _camera.orthographicSize = height / 2f + padding;
     }
     private void RepositionCamera()
     {
