@@ -326,6 +326,8 @@ MonoBehaviour:
   pieceMask:
     serializedVersion: 2
     m_Bits: 64
+  pieceMoveSpeed: 3
+  isMovePositive: 0
 --- !u!1 &1897457869
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,10 +486,7 @@ MonoBehaviour:
   - {fileID: 2933357532614951807, guid: e1474a53b346ed640806f27b90f370fe, type: 3}
   - {fileID: 2933357532614951807, guid: ae6f18466b3166842be3a59ec3caba19, type: 3}
   - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
-  specialTiles:
-  - column: 4
-    row: 0
-    type: 0
+  specialTiles: []
 --- !u!4 &1975425000
 Transform:
   m_ObjectHideFlags: 0

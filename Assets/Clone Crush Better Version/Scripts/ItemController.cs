@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public enum States {
@@ -7,30 +8,35 @@ public enum States {
 public class ItemController : MonoBehaviour
 {
     [SerializeField] private LayerMask pieceMask;
+    [SerializeField] private float pieceMoveSpeed = 1f;
+    [SerializeField] private bool isMovePositive; //Is there a match when a piece moved, if not swap back them to their old positions
 
     //Variable for direction
     private Vector2 startPos;
     private Vector2 endPos;
 
-    private bool itemSelected;
-    private int column, row;
-    ItemSpawnManager itemSpawnManager;
+    private States currentState; //State to move pieces
+    private bool itemSelected; //Is there any objects on players' first click
+    private int column, row; //Positions of clicked object
+    private ItemSpawnManager itemSpawnManager;
     private void Awake()
     {
         itemSpawnManager = FindObjectOfType<ItemSpawnManager>();
+        currentState = States.Move;
     }
     private void Update()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, Vector2.zero, Mathf.Infinity, pieceMask);
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && currentState == States.Move)
         {
             if (hit.collider != null)
             {
                 Piece p = hit.collider.GetComponent<Piece>();
                 if (p != null)
                 {
+                    //isMovePositive = false;
                     itemSelected = true;
                     startPos = hit.point;
                     column = p.column;
@@ -62,7 +68,7 @@ public class ItemController : MonoBehaviour
                             {
                                 if (itemSpawnManager.itemList[column + 1, row] != null)
                                 {
-                                    MovePiecesSec(column, row, column + 1, row);
+                                    MovePieces(column, row, column + 1, row);
                                 }
                             }
                         }
@@ -96,7 +102,7 @@ public class ItemController : MonoBehaviour
                                     end.row = row;
 
                                     //Debug.Log(itemSpawnManager.itemList[column + 1, row].gameObject.name);*/
-                                    MovePiecesSec(column, row, column, row + 1);
+                                    MovePieces(column, row, column, row + 1);
                                 }
                             }
                         }
@@ -107,7 +113,7 @@ public class ItemController : MonoBehaviour
                             {
                                 if (itemSpawnManager.itemList[column - 1, row] != null)
                                 {
-                                    MovePiecesSec(column, row, column - 1, row);
+                                    MovePieces(column, row, column - 1, row);
                                 }
                             }
                         }
@@ -118,7 +124,7 @@ public class ItemController : MonoBehaviour
                             {
                                 if (itemSpawnManager.itemList[column, row - 1] != null)
                                 {
-                                    MovePiecesSec(column, row, column, row - 1);
+                                    MovePieces(column, row, column, row - 1);
                                 }
                             }
                         }
@@ -127,54 +133,95 @@ public class ItemController : MonoBehaviour
             }
         }
     }
-    private void MovePiecesSec(int currentColumn, int currentRow, int otherColumn, int otherRow)
+    private void MovePieces(int currentColumn, int currentRow, int otherColumn, int otherRow)
     {
-            //Get spawing objects
-            GameObject startObj = itemSpawnManager.itemList[currentColumn, currentRow];
-            GameObject endObj = itemSpawnManager.itemList[otherColumn, otherRow];
+        currentState = States.Stop;
+        StartCoroutine(MoveCor(currentColumn, currentRow, otherColumn, otherRow));
+        /*
+            // //Get spawing objects
+            // GameObject startObj = itemSpawnManager.itemList[currentColumn, currentRow];
+            // GameObject endObj = itemSpawnManager.itemList[otherColumn, otherRow];
 
-            //Swap their postions
-            var tempPos = endObj.transform.position;
-            endObj.transform.position = startObj.transform.position;
-            startObj.transform.position = tempPos;
+            // //Swap their postions
+            // var tempPos = endObj.transform.position;
+            // endObj.transform.position = startObj.transform.position;
+            // startObj.transform.position = tempPos;
 
-            //Swap their positions in array
-            itemSpawnManager.itemList[currentColumn, currentRow] = endObj;
-            itemSpawnManager.itemList[otherColumn, otherRow] = startObj;
+            // //Swap their positions in array
+            // itemSpawnManager.itemList[currentColumn, currentRow] = endObj;
+            // itemSpawnManager.itemList[otherColumn, otherRow] = startObj;
 
-            //Swap their inside columns and rows
-            Piece start = startObj.GetComponent<Piece>();
-            Piece end = endObj.GetComponent<Piece>();
+            // //Swap their inside columns and rows
+            // Piece start = startObj.GetComponent<Piece>();
+            // Piece end = endObj.GetComponent<Piece>();
 
-            start.column = otherColumn;
-            start.row = otherRow;
+            // start.column = otherColumn;
+            // start.row = otherRow;
 
-            end.column = currentColumn;
-            end.row = currentRow;
+            // end.column = currentColumn;
+            // end.row = currentRow;
+            */
     }
-    private void MovePieces(int currentColumn, int currentRow)
+
+    private IEnumerator MoveCor(int currentColumn, int currentRow, int otherColumn, int otherRow)
     {
-        if (itemSpawnManager.itemList[currentColumn, currentRow + 1] != null)
+        //Lerp Parameters
+        float current, target;
+        current = 0;
+        target = 1f;
+
+        //Get swapping objects
+        GameObject startObj = itemSpawnManager.itemList[currentColumn, currentRow];
+        GameObject endObj = itemSpawnManager.itemList[otherColumn, otherRow];
+
+        //Get target postions
+        var tempStartPos = startObj.transform.position;
+        var tempEndPos = endObj.transform.position;
+
+        //Move objects to the target positions
+        while(current < target)
         {
-            //Get spawing objects
-            GameObject startObj = itemSpawnManager.itemList[currentColumn, currentRow];
-            GameObject endObj = itemSpawnManager.itemList[currentColumn, currentRow + 1];
+            current = Mathf.MoveTowards(current, target, Time.deltaTime * pieceMoveSpeed);
 
-            //Swap their postions
-            var tempPos = endObj.transform.position;
-            endObj.transform.position = startObj.transform.position;
-            startObj.transform.position = tempPos;
+            endObj.transform.position = Vector3.Lerp(endObj.transform.position, tempStartPos, current);
+            startObj.transform.position = Vector3.Lerp(startObj.transform.position, tempEndPos, current);
 
-            //Swap their positions in array
-            itemSpawnManager.itemList[currentColumn, currentRow] = endObj;
-            itemSpawnManager.itemList[currentColumn, currentRow + 1] = startObj;
+            yield return null;
+        }
+        //Swap their positions in array
+        itemSpawnManager.itemList[currentColumn, currentRow] = endObj;
+        itemSpawnManager.itemList[otherColumn, otherRow] = startObj;
 
-            //Swap their inside columns and rows
-            Piece start = startObj.GetComponent<Piece>();
-            Piece end = endObj.GetComponent<Piece>();
+        //Swap their inside columns and rows
+        Piece start = startObj.GetComponent<Piece>();
+        Piece end = endObj.GetComponent<Piece>();
 
-            start.row = currentRow + 1;
-            end.row = currentRow;
+        start.column = otherColumn;
+        start.row = otherRow;
+
+        end.column = currentColumn;
+        end.row = currentRow;
+
+        itemSpawnManager.MatchCheck();
+
+        currentState = States.Move;
+
+        //Check is swapping positive, which means there is match when a piece swapped
+        if(!isMovePositive)
+            isMovePositive = itemSpawnManager.IsThereAMatch();
+
+        //If it is, complete swapping
+        if(isMovePositive)
+        {
+            itemSpawnManager.DestroyMatches();
+            currentState = States.Move;
+            isMovePositive = false;
+        }
+        //If not, reverse swapping
+        else
+        {
+            isMovePositive = true;
+            StartCoroutine(MoveCor(currentColumn, currentRow, otherColumn, otherRow));
         }
     }
     private string CheckDirection(Vector2 dir)
