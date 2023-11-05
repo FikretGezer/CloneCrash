@@ -26,7 +26,7 @@ public class ItemSpawnManager : MonoBehaviour
     [SerializeField] private PieceSelect[] specialTiles;
 
     public GameObject[,] itemList;
-    private bool[,] blankSpaces;
+    public bool[,] blankSpaces;
     private bool[,] fillingSpaces;
     public List<GameObject> matchedPieces = new List<GameObject>();
 
@@ -177,6 +177,8 @@ public class ItemSpawnManager : MonoBehaviour
                                 AddToTheMatches(currentPiece);
                                 AddToTheMatches(leftPiece);
                                 AddToTheMatches(rightPiece);
+
+                                ThereIsAMatch = true;
                             }
                         }
                     }
@@ -195,17 +197,21 @@ public class ItemSpawnManager : MonoBehaviour
                                 AddToTheMatches(currentPiece);
                                 AddToTheMatches(downPiece);
                                 AddToTheMatches(upPiece);
+
+                                ThereIsAMatch = true;
                             }
                         }
                     }
                 }
             }
         }
+        //DestroyMatches();
     }
     private void AddToTheMatches(GameObject obj)
     {
         if(!matchedPieces.Contains(obj)) matchedPieces.Add(obj);
     }
+    public bool ThereIsAMatch {get; set;}
     public bool IsThereAMatch()
     {
         if(matchedPieces.Count > 0)
@@ -215,6 +221,7 @@ public class ItemSpawnManager : MonoBehaviour
     }
     public void DestroyMatches()
     {
+        //Remove matched pieces
         foreach (var piece in matchedPieces)
         {
             var p = piece.GetComponent<Piece>();
@@ -225,16 +232,28 @@ public class ItemSpawnManager : MonoBehaviour
 
             Destroy(piece);
         }
+        //Clear the list contains matched pieces
         matchedPieces.Clear();
-        StartCoroutine(nameof(FillingTheBoard));
+
+        //Fill The Board with new pieces
+        //StartCoroutine(nameof(FillingTheBoard));
     }
     IEnumerator FillingTheBoard()
     {
         yield return new WaitForSeconds(0.2f);
+        ThereIsAMatch = false;
         FillTheBoard();
-        yield return new WaitForSeconds(0.2f);
-        DestroyMatches();
     }
+    // private void FillTheBoardAdvanced()
+    // {
+    //     for (int x = 0; x < boardWidth; x++)
+    //     {
+    //         for (int y = 0; y < boardHeight; y++)
+    //         {
+    //             if(!blankSpaces[x, y] && )
+    //         }
+    //     }
+    // }
     private void FillTheBoard()
     {
         for (int x = 0; x < boardWidth; x++)
@@ -248,7 +267,8 @@ public class ItemSpawnManager : MonoBehaviour
                 }
             }
         }
-
+        // //If there is any matches check and destroy them
+        // MatchCheck();
     }
     private void CreateNewPiece(int x, int y)
     {

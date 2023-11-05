@@ -202,13 +202,16 @@ public class ItemController : MonoBehaviour
         end.column = currentColumn;
         end.row = currentRow;
 
+        //Add matched items to the list
         itemSpawnManager.MatchCheck();
 
-        currentState = States.Move;
+        //currentState = States.Move;
 
-        //Check is swapping positive, which means there is match when a piece swapped
-        if(!isMovePositive)
+        //Check is swapping positive, which means is there at least one match when a piece swapped
+        if(!isMovePositive){
+            //isMovePositive = itemSpawnManager.ThereIsAMatch;
             isMovePositive = itemSpawnManager.IsThereAMatch();
+        }
 
         //If it is, complete swapping
         if(isMovePositive)
