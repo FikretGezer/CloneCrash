@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3547744505501267697}
   - component: {fileID: 3885413832757649897}
   m_Layer: 0
-  m_Name: Lock Tile
+  m_Name: BG_Tile
   m_TagString: lock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

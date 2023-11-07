@@ -1,232 +1,170 @@
 using System.Collections;
 using UnityEngine;
-
-public enum States {
+public enum MoveState{
     Move,
     Stop
 }
 public class ItemController : MonoBehaviour
 {
     [SerializeField] private LayerMask pieceMask;
-    [SerializeField] private float pieceMoveSpeed = 1f;
-    [SerializeField] private bool isMovePositive; //Is there a match when a piece moved, if not swap back them to their old positions
+    [SerializeField] private float lerpSpeed = 1f;
+    private Camera cam;
+    private Vector2 startPos, endPos;
+    private bool isThereAMatch;
+    private bool isSwapStarted;
 
-    //Variable for direction
-    private Vector2 startPos;
-    private Vector2 endPos;
-
-    private States currentState; //State to move pieces
-    private bool itemSelected; //Is there any objects on players' first click
-    private int column, row; //Positions of clicked object
-    private ItemSpawnManager itemSpawnManager;
-    private void Awake()
-    {
-        itemSpawnManager = FindObjectOfType<ItemSpawnManager>();
-        currentState = States.Move;
+    private Piece selectedPiece;
+    private MoveState moveState;
+    private void Awake() {
+        cam = Camera.main;
+        moveState = MoveState.Move;
     }
-    private void Update()
-    {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, Vector2.zero, Mathf.Infinity, pieceMask);
-
-        if(Input.GetMouseButtonDown(0) && currentState == States.Move)
+    private void Update() {
+        var pos = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(pos.origin, Vector2.zero, Mathf.Infinity, pieceMask);
+        if(moveState == MoveState.Move)
         {
-            if (hit.collider != null)
+            if(Input.GetMouseButtonDown(0))
             {
-                Piece p = hit.collider.GetComponent<Piece>();
-                if (p != null)
+                if(hit.collider != null)
                 {
-                    //isMovePositive = false;
-                    itemSelected = true;
-                    startPos = hit.point;
-                    column = p.column;
-                    row = p.row;
+                    startPos = pos.origin;
+                    selectedPiece = hit.collider.GetComponent<Piece>();
                 }
             }
-        }
-        if(Input.GetMouseButtonUp(0) && itemSpawnManager != null)
-        {
-            if(itemSelected) //This means there is an item at startPosition, column and row rearrange using that item
+            if(Input.GetMouseButtonUp(0))
             {
-                itemSelected = false;
-                endPos = ray.origin;
-                Vector2 dir = endPos - startPos;
-
-                //Checking does player swipe towards any direction
-                if(dir.magnitude > 0.02f)
+                if(selectedPiece != null)
                 {
-                    string direction = string.Empty;
-                    direction = CheckDirection(dir.normalized);
-
-                    //First if maybe useless, i can remove it
-                    if (itemSpawnManager.itemList[column, row] != null)//
+                    endPos = pos.origin;
+                    var dir = endPos - startPos;
+                    if(dir.magnitude > 0.1f)
                     {
-                        if(direction == "Right")
-                        {
-                            //check if movement exceed the board
-                            if(column + 1 < itemSpawnManager.boardWidth)
-                            {
-                                if (itemSpawnManager.itemList[column + 1, row] != null)
-                                {
-                                    MovePieces(column, row, column + 1, row);
-                                }
-                            }
-                        }
-                        if(direction == "Up")
-                        {
-                            //check if movement exceed the board
-                            if(row + 1 < itemSpawnManager.boardHeight)
-                            {
-                                if (itemSpawnManager.itemList[column, row + 1] != null)
-                                {
-                                    /*Debug.Log(direction);
+                        checkCount = 0;
+                        isSwapStarted = true;
+                        isThereAMatch = false;
 
-                                    //Get spawing objects
-                                    GameObject startObj = itemSpawnManager.itemList[column, row];
-                                    GameObject endObj = itemSpawnManager.itemList[column, row + 1];
-
-                                    //Swap their postions
-                                    var tempPos = endObj.transform.position;
-                                    endObj.transform.position = startObj.transform.position;
-                                    startObj.transform.position = tempPos;
-
-                                    //Swap their positions in array
-                                    itemSpawnManager.itemList[column, row] = endObj;
-                                    itemSpawnManager.itemList[column, row + 1] = startObj;
-
-                                    //Swap their inside columns and rows
-                                    Piece start = startObj.GetComponent<Piece>();
-                                    Piece end = endObj.GetComponent<Piece>();
-
-                                    start.row = row + 1;
-                                    end.row = row;
-
-                                    //Debug.Log(itemSpawnManager.itemList[column + 1, row].gameObject.name);*/
-                                    MovePieces(column, row, column, row + 1);
-                                }
-                            }
-                        }
-                        if(direction == "Left")
-                        {
-                            //check if movement exceed the board
-                            if(column - 1 >= 0)
-                            {
-                                if (itemSpawnManager.itemList[column - 1, row] != null)
-                                {
-                                    MovePieces(column, row, column - 1, row);
-                                }
-                            }
-                        }
-                        if(direction == "Down")
-                        {
-                            //check if movement exceed the board
-                            if(row - 1 >= 0)
-                            {
-                                if (itemSpawnManager.itemList[column, row - 1] != null)
-                                {
-                                    MovePieces(column, row, column, row - 1);
-                                }
-                            }
-                        }
+                        var actualDir = CheckDirection(dir.normalized);
+                        SwapObjects(actualDir);
                     }
                 }
             }
         }
     }
-    private void MovePieces(int currentColumn, int currentRow, int otherColumn, int otherRow)
+    private int column, row, targetColumn, targetRow;
+    private void SwapObjects(string direction)
     {
-        currentState = States.Stop;
-        StartCoroutine(MoveCor(currentColumn, currentRow, otherColumn, otherRow));
-        /*
-            // //Get spawing objects
-            // GameObject startObj = itemSpawnManager.itemList[currentColumn, currentRow];
-            // GameObject endObj = itemSpawnManager.itemList[otherColumn, otherRow];
+        column = selectedPiece.column;
+        row = selectedPiece.row;
 
-            // //Swap their postions
-            // var tempPos = endObj.transform.position;
-            // endObj.transform.position = startObj.transform.position;
-            // startObj.transform.position = tempPos;
-
-            // //Swap their positions in array
-            // itemSpawnManager.itemList[currentColumn, currentRow] = endObj;
-            // itemSpawnManager.itemList[otherColumn, otherRow] = startObj;
-
-            // //Swap their inside columns and rows
-            // Piece start = startObj.GetComponent<Piece>();
-            // Piece end = endObj.GetComponent<Piece>();
-
-            // start.column = otherColumn;
-            // start.row = otherRow;
-
-            // end.column = currentColumn;
-            // end.row = currentRow;
-            */
+        //isThereAMatch = true;
+        if(direction == "Right")
+        {
+            if(column + 1 < ItemSpawnManager.Instance.boardWidth && ItemSpawnManager.Instance.pieceList[column + 1, row] != null)
+            {
+                //Debug.LogWarning(ItemSpawnManager.Instance.pieceList[selectedPiece.column + 1, selectedPiece.row]);
+                moveState = MoveState.Stop;
+                Swapping(column, row, column + 1, row);
+                //Get targets to swap back pieces, if there is no match
+                targetColumn = column + 1;
+                targetRow = row;
+            }
+        }
+        else if(direction == "Up")
+        {
+            if(row + 1 < ItemSpawnManager.Instance.boardHeight && ItemSpawnManager.Instance.pieceList[column, row + 1] != null)
+            {
+                moveState = MoveState.Stop;
+                Swapping(column, row, column, row + 1);
+                //Get targets to swap back pieces, if there is no match
+                targetColumn = column;
+                targetRow = row + 1;
+            }
+        }
+        else if(direction == "Left")
+        {
+            if(column - 1 >= 0 && ItemSpawnManager.Instance.pieceList[column - 1, row] != null){
+                moveState = MoveState.Stop;
+                Swapping(column, row, column - 1, row);
+                //Get targets to swap back pieces, if there is no match
+                targetColumn = column - 1;
+                targetRow = row;
+            }
+        }
+        else if(direction == "Down")
+        {
+            if(row - 1 >= 0 && ItemSpawnManager.Instance.pieceList[column, row - 1] != null){
+                moveState = MoveState.Stop;
+                Swapping(column, row, column, row - 1);
+                //Get targets to swap back pieces, if there is no match
+                targetColumn = column;
+                targetRow = row - 1;
+            }
+        }
     }
-
-    private IEnumerator MoveCor(int currentColumn, int currentRow, int otherColumn, int otherRow)
+    private void Swapping(int currentColumn, int currentRow, int targetColumn, int targetRow)
     {
-        //Lerp Parameters
-        float current, target;
-        current = 0;
-        target = 1f;
+        //Change positions in pieceList
+        GameObject targetObj = ItemSpawnManager.Instance.pieceList[targetColumn, targetRow];
+        ItemSpawnManager.Instance.pieceList[targetColumn, targetRow] = selectedPiece.gameObject;
+        ItemSpawnManager.Instance.pieceList[currentColumn, currentRow] = targetObj;
 
-        //Get swapping objects
-        GameObject startObj = itemSpawnManager.itemList[currentColumn, currentRow];
-        GameObject endObj = itemSpawnManager.itemList[otherColumn, otherRow];
+        //Change column and rows
+        targetObj.GetComponent<Piece>().column = currentColumn;
+        targetObj.GetComponent<Piece>().row = currentRow;
 
-        //Get target postions
-        var tempStartPos = startObj.transform.position;
-        var tempEndPos = endObj.transform.position;
+        selectedPiece.column = targetColumn;
+        selectedPiece.row = targetRow;
 
-        //Move objects to the target positions
+        //Set positions for actual swap
+        var tempPos = targetObj.transform.position;
+        var currentPos = selectedPiece.transform.position;
+
+        //Swap
+        StartCoroutine(ActualSwapping(selectedPiece.transform, targetObj.transform, currentPos, tempPos));
+    }
+    IEnumerator ActualSwapping(Transform currentObj, Transform targetObj, Vector2 currentPos, Vector2 targetPos)
+    {
+        float current = 0f, target = 1f;
+        //Start swapping
         while(current < target)
         {
-            current = Mathf.MoveTowards(current, target, Time.deltaTime * pieceMoveSpeed);
-
-            endObj.transform.position = Vector3.Lerp(endObj.transform.position, tempStartPos, current);
-            startObj.transform.position = Vector3.Lerp(startObj.transform.position, tempEndPos, current);
+            current = Mathf.MoveTowards(current, target, Time.deltaTime * lerpSpeed);
+            currentObj.position = Vector2.Lerp(currentObj.position, targetPos, current);
+            targetObj.position = Vector2.Lerp(targetObj.position, currentPos, current);
 
             yield return null;
         }
-        //Swap their positions in array
-        itemSpawnManager.itemList[currentColumn, currentRow] = endObj;
-        itemSpawnManager.itemList[otherColumn, otherRow] = startObj;
 
-        //Swap their inside columns and rows
-        Piece start = startObj.GetComponent<Piece>();
-        Piece end = endObj.GetComponent<Piece>();
-
-        start.column = otherColumn;
-        start.row = otherRow;
-
-        end.column = currentColumn;
-        end.row = currentRow;
-
-        //Add matched items to the list
-        itemSpawnManager.MatchCheck();
-
-        //currentState = States.Move;
-
-        //Check is swapping positive, which means is there at least one match when a piece swapped
-        if(!isMovePositive){
-            //isMovePositive = itemSpawnManager.ThereIsAMatch;
-            isMovePositive = itemSpawnManager.IsThereAMatch();
-        }
-
-        //If it is, complete swapping
-        if(isMovePositive)
+        //Check is there a match
+        if(isSwapStarted)
         {
-            itemSpawnManager.DestroyMatches();
-            currentState = States.Move;
-            isMovePositive = false;
+            isThereAMatch = FindMatches.Instance.MatchFinding();
+            isSwapStarted = false;
+            if(!isThereAMatch)//No match
+            {
+                //Swap back pieces
+                Swapping(targetColumn, targetRow, column, row);
+                checkCount++;
+                //isThereAMatch = false;
+            }
+            else //There is a match
+            {
+                //Complete the swapping
+                FindMatches.Instance.DestroyMatches();
+                selectedPiece = null;
+                moveState = MoveState.Move;
+            }
         }
-        //If not, reverse swapping
-        else
+        //This means; there was not match when pieces swapped so pieces swapped back to their originals
+        if(checkCount > 0)
         {
-            isMovePositive = true;
-            StartCoroutine(MoveCor(currentColumn, currentRow, otherColumn, otherRow));
+            selectedPiece = null;
+            moveState = MoveState.Move;
         }
+
     }
+    private int checkCount = 0;
     private string CheckDirection(Vector2 dir)
     {
         float angleDeg = DirToAngle(dir);
@@ -244,10 +182,6 @@ public class ItemController : MonoBehaviour
         }
         else
             return "Down";
-        // else if (angleDeg >= 215f && angleDeg < 315f)
-        // {
-        //     return "Down";
-        // }
     }
     private float DirToAngle(Vector2 dir)
     {

@@ -326,8 +326,52 @@ MonoBehaviour:
   pieceMask:
     serializedVersion: 2
     m_Bits: 64
-  pieceMoveSpeed: 3
-  isMovePositive: 0
+  lerpSpeed: 3
+--- !u!1 &1062486489
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1062486491}
+  - component: {fileID: 1062486490}
+  m_Layer: 0
+  m_Name: Match Finer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1062486490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062486489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6abfb112c38d4842834017a67276e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matches: []
+--- !u!4 &1062486491
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062486489}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.9163163, y: 2.9212787, z: -0.0045176405}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1897457869
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,9 +527,6 @@ MonoBehaviour:
   - {fileID: 2933357532614951807, guid: dc4ddf6e6db9f1f4fb0231fd4c1faf0c, type: 3}
   - {fileID: 2933357532614951807, guid: 0a0dd3dd15e537943bb211618be4ba77, type: 3}
   - {fileID: 2933357532614951807, guid: af19ce7c42f6c9849af5bac071951276, type: 3}
-  - {fileID: 2933357532614951807, guid: e1474a53b346ed640806f27b90f370fe, type: 3}
-  - {fileID: 2933357532614951807, guid: ae6f18466b3166842be3a59ec3caba19, type: 3}
-  - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
   specialTiles: []
 --- !u!4 &1975425000
 Transform:
@@ -510,3 +551,4 @@ SceneRoots:
   - {fileID: 1897457871}
   - {fileID: 1975425000}
   - {fileID: 860649828}
+  - {fileID: 1062486491}
