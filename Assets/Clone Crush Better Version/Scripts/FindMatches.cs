@@ -71,9 +71,66 @@ public class FindMatches : MonoBehaviour
     }
     public void DestroyMatches()
     {
-        foreach(var item in matches)
+        if(matches.Count > 0)
         {
-            Destroy(item);
+            ItemController.Instance.moveState = MoveState.Stop;
+            foreach(var item in matches)
+            {
+                Destroy(item);
+            }
+            matches.Clear();
+            StartCoroutine(nameof(MoveTheBoardCo));
+        }
+    }
+    private IEnumerator MoveTheBoardCo()
+    {
+        ItemController.Instance.moveState = MoveState.Stop;
+        yield return new WaitForSeconds(0.4f);
+
+        for (int x = 0; x < ItemSpawnManager.Instance.boardWidth; x++)
+        {
+            for (int y = 0; y < ItemSpawnManager.Instance.boardHeight; y++)
+            {
+                if(ItemSpawnManager.Instance.pieceList[x, y] == null)
+                {
+                    for (int i = y + 1; i < ItemSpawnManager.Instance.boardHeight; i++)
+                    {
+                        if(ItemSpawnManager.Instance.pieceList[x, i] != null)
+                        {
+                            //Get moving obj
+                            var movingObj = ItemSpawnManager.Instance.pieceList[x, i];
+                            //Move obj to empty position in array
+                            ItemSpawnManager.Instance.pieceList[x, i] = null;//moving obj pos, 1br above (y + 1) from target pos
+                            ItemSpawnManager.Instance.pieceList[x, y] = movingObj;//empty pos
+
+                            //Change row
+                            movingObj.GetComponent<Piece>().row = y;
+
+                            //Set position
+                            // movingObj.transform.position = new Vector2((int)x, (int)y);
+                            //movingObj.GetComponent<Piece>().IsMoving = true;
+                            //movingObj.GetComponent<Piece>().MoveObjectCor();
+                            movingObj.GetComponent<Piece>().current = 0f;
+                            movingObj.GetComponent<Piece>().IsMoving = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.4f);
+        //Check is there is any matches
+        MatchFinding();
+        yield return new WaitForSeconds(0.1f);
+        if(matches.Count > 0)
+        {
+            DestroyMatches();
+        }
+        else
+        {
+            ItemSpawnManager.Instance.FillTheBoard();
+            yield return new WaitForSeconds(0.4f);
+            ItemController.Instance.moveState = MoveState.Move;
         }
     }
 }

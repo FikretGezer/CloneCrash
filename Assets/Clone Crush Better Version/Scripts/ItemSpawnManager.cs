@@ -139,5 +139,65 @@ public class ItemSpawnManager : MonoBehaviour
 
         return false;
     }
+    public void FillTheBoard()
+    {
+        for (int x = 0; x < boardWidth; x++)
+        {
+            for (int y = 0; y < boardHeight; y++)
+            {
+                if(pieceList[x, y] == null)
+                {
+                    CreateNewPiece(x, y);
+                }
+            }
+        }
+    }
+    private void CreateNewPiece(int x, int y)
+    {
+        Vector2 instantiatePosition = new Vector2(x, y);
 
+        //Create Actual Pieces
+        int rnd = Random.Range(0, piecePrefabs.Length);
+        GameObject selectedPrefab = piecePrefabs[rnd];
+
+        int counter = 0;
+        while(counter < 100 && (IsMatchingHorizontally(x, y, selectedPrefab) || IsMatchingVertically(x, y, selectedPrefab)))
+        {
+            rnd = Random.Range(0, piecePrefabs.Length);
+            selectedPrefab = piecePrefabs[rnd];
+            counter++;
+        }
+
+        var piece = Instantiate(selectedPrefab, new Vector2(x, boardHeight + 3), Quaternion.identity);
+        pieceList[x, y] = piece;
+        piece.name = $"{x}, {y}";
+        piece.GetComponent<Piece>().column = x;
+        piece.GetComponent<Piece>().row = y;
+        piece.transform.SetParent(parentPieces.transform);
+        piece.GetComponent<Piece>().current = 0f;
+        piece.GetComponent<Piece>().IsMoving = true;
+    }
+    // private void CreateNewPiece(int x, int y)
+    // {
+    //     Vector2 instantiatePosition = new Vector2(x, y);
+
+    //     //Create Actual Pieces
+    //     int rnd = Random.Range(0, piecePrefabs.Length);
+    //     GameObject selectedPrefab = piecePrefabs[rnd];
+
+    //     int counter = 0;
+    //     while(counter < 100 && (IsMatchingHorizontally(x, y, selectedPrefab) || IsMatchingVertically(x, y, selectedPrefab)))
+    //     {
+    //         rnd = Random.Range(0, piecePrefabs.Length);
+    //         selectedPrefab = piecePrefabs[rnd];
+    //         counter++;
+    //     }
+
+    //     var piece = Instantiate(selectedPrefab, instantiatePosition, Quaternion.identity);
+    //     pieceList[x, y] = piece;
+    //     piece.name = $"{x}, {y}";
+    //     piece.GetComponent<Piece>().column = x;
+    //     piece.GetComponent<Piece>().row = y;
+    //     piece.transform.SetParent(parentPieces.transform);
+    // }
 }

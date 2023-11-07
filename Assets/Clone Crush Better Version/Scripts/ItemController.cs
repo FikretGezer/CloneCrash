@@ -14,8 +14,11 @@ public class ItemController : MonoBehaviour
     private bool isSwapStarted;
 
     private Piece selectedPiece;
-    private MoveState moveState;
+    public MoveState moveState;
+    public static ItemController Instance;
     private void Awake() {
+        if(Instance == null) Instance = this;
+
         cam = Camera.main;
         moveState = MoveState.Move;
     }

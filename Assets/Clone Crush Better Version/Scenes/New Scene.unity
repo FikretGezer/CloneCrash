@@ -327,6 +327,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   lerpSpeed: 3
+  moveState: 0
 --- !u!1 &1062486489
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +528,9 @@ MonoBehaviour:
   - {fileID: 2933357532614951807, guid: dc4ddf6e6db9f1f4fb0231fd4c1faf0c, type: 3}
   - {fileID: 2933357532614951807, guid: 0a0dd3dd15e537943bb211618be4ba77, type: 3}
   - {fileID: 2933357532614951807, guid: af19ce7c42f6c9849af5bac071951276, type: 3}
+  - {fileID: 2933357532614951807, guid: e1474a53b346ed640806f27b90f370fe, type: 3}
+  - {fileID: 2933357532614951807, guid: ae6f18466b3166842be3a59ec3caba19, type: 3}
+  - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
   specialTiles: []
 --- !u!4 &1975425000
 Transform:
