@@ -59,6 +59,12 @@ public class FindMatches : MonoBehaviour
                 }
             }
         }
+        if(matches.Count > 0)
+        {
+            Debug.Log("It works");
+            MatchCounter();
+        }
+
         if(isThereAMatch) return true;
         return false;
     }
@@ -67,6 +73,48 @@ public class FindMatches : MonoBehaviour
         if(!matches.Contains(obj))
         {
             matches.Add(obj);
+        }
+    }
+    private void MatchCounter()
+    {
+        int prevX = matches[0].GetComponent<Piece>().column;
+        int prevY = matches[0].GetComponent<Piece>().row;
+
+        int horCount = 1, verCount = 1;
+
+        for (int i = 1; i < matches.Count; i++)
+        {
+            int currentX = matches[i].GetComponent<Piece>().column;
+            int currentY = matches[i].GetComponent<Piece>().row;
+
+            //Vertically Match
+            if(currentX == prevX)
+            {
+                horCount++;
+            }
+            else
+            {
+                if(horCount > 2)
+                {
+                    Debug.Log("Ver Match Count: " + horCount);
+                    horCount = 1;
+                }
+            }
+            //Horizontally Match
+            if(currentY == prevY)
+            {
+                verCount++;
+            }
+            else
+            {
+                if(verCount > 2)
+                {
+                    Debug.Log("Hor Match Count: " + verCount);
+                    verCount = 1;
+                }
+            }
+            prevX = currentX;
+            prevY = currentY;
         }
     }
     public void DestroyMatches()
