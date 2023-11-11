@@ -47,7 +47,7 @@ public class HintManager : MonoBehaviour
                     {
                         if (board.SwitchAndCheck(x, y, Vector2.up))
                         {
-                            possibleMoves.Add(board.allDots[x, y]);                            
+                            possibleMoves.Add(board.allDots[x, y]);
                         }
                     }
                 }

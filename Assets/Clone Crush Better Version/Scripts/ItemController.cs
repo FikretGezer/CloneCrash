@@ -12,6 +12,8 @@ public class ItemController : MonoBehaviour
     private Vector2 startPos, endPos;
     private bool isThereAMatch;
     private bool isSwapStarted;
+    private int column, row, targetColumn, targetRow;
+    private int checkCount = 0;
 
     private Piece selectedPiece;
     public MoveState moveState;
@@ -54,7 +56,6 @@ public class ItemController : MonoBehaviour
             }
         }
     }
-    private int column, row, targetColumn, targetRow;
     private void SwapObjects(string direction)
     {
         column = selectedPiece.column;
@@ -167,7 +168,6 @@ public class ItemController : MonoBehaviour
         }
 
     }
-    private int checkCount = 0;
     private string CheckDirection(Vector2 dir)
     {
         float angleDeg = DirToAngle(dir);

@@ -181,4 +181,77 @@ public class FindMatches : MonoBehaviour
             ItemController.Instance.moveState = MoveState.Move;
         }
     }
+    private void SolveDeadLock()
+    {
+
+    }
+    private void SwitchPieces(int column, int row, Vector2 dir)
+    {
+        int newColumn = column + (int)dir.x;
+        int newRow = row + (int)dir.y;
+        var pieceList = ItemSpawnManager.Instance.pieceList;
+        if(newColumn < ItemSpawnManager.Instance.boardWidth
+        && newRow < ItemSpawnManager.Instance.boardHeight)
+        {
+            if(pieceList[newColumn, newRow] != null)
+            {
+                GameObject holder = pieceList[newColumn, newRow];
+                pieceList[newColumn, newRow] = pieceList[column, row];
+                pieceList[column, row] = holder;
+            }
+        }
+    }
+    public bool SwitchAndCheck(int column, int row, Vector2 dir)
+    {
+        SwitchPieces(column, row, dir);
+
+        if(OnlyCheckMatches())
+        {
+            SwitchPieces(column, row, dir);
+            return true;
+        }
+        SwitchPieces(column, row, dir);
+        return false;
+    }
+    public bool OnlyCheckMatches()
+    {
+        var pieceList = ItemSpawnManager.Instance.pieceList;
+        for (int x = 0; x < ItemSpawnManager.Instance.boardWidth; x++)
+        {
+            for (int y = 0; y < ItemSpawnManager.Instance.boardHeight; y++)
+            {
+                if(x - 2 >= 0)
+                {
+                    if(pieceList[x, y] != null && pieceList[x - 1, y] != null && pieceList[x - 2, y] != null)
+                    {
+                        var currentObj = pieceList[x, y];
+                        var leftObj = pieceList[x - 1, y];
+                        var leftLeftObj = pieceList[x - 2, y];
+
+                        if(currentObj.CompareTag(leftObj.tag) && currentObj.CompareTag(leftLeftObj.tag))
+                        {
+                            HintGiver.Instance.AddPossibleMatches(new List<GameObject> {currentObj, leftObj, leftLeftObj});
+                            return true;
+                        }
+                    }
+                }
+                if(y - 2 >= 0)
+                {
+                    if(pieceList[x, y] != null && pieceList[x, y - 1] != null && pieceList[x, y - 2] != null)
+                    {
+                        var currentObj = pieceList[x, y];
+                        var downObj = pieceList[x, y - 1];
+                        var downDownObj = pieceList[x, y - 2];
+
+                        if(currentObj.CompareTag(downObj.tag) && currentObj.CompareTag(downDownObj.tag))
+                        {
+                            HintGiver.Instance.AddPossibleMatches(new List<GameObject> {currentObj, downObj, downDownObj});
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
