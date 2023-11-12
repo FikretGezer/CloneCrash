@@ -9,6 +9,16 @@ public class FindMatches : MonoBehaviour
     private void Awake() {
         if(Instance == null) Instance = this;
     }
+    private void LateUpdate() {
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            if(!IsDeadlocked())
+            {
+                //ItemController.Instance.moveState = MoveState.Stop;
+                SolveDeadlock();
+            }
+        }
+    }
     public bool MatchFinding()
     {
         var pieceList = ItemSpawnManager.Instance.pieceList;
@@ -158,8 +168,9 @@ public class FindMatches : MonoBehaviour
                             // movingObj.transform.position = new Vector2((int)x, (int)y);
                             //movingObj.GetComponent<Piece>().IsMoving = true;
                             //movingObj.GetComponent<Piece>().MoveObjectCor();
-                            movingObj.GetComponent<Piece>().current = 0f;
-                            movingObj.GetComponent<Piece>().IsMoving = true;
+                            // movingObj.GetComponent<Piece>().current = 0f;
+                            // movingObj.GetComponent<Piece>().isMoving = true;
+                            movingObj.GetComponent<Piece>().ResetMovingValues();
                             break;
                         }
                     }
@@ -181,14 +192,81 @@ public class FindMatches : MonoBehaviour
             ItemController.Instance.moveState = MoveState.Move;
         }
     }
-    private void SolveDeadLock()
+    private bool IsDeadlocked()
     {
-
+        int height = ItemSpawnManager.Instance.boardHeight;
+        int width = ItemSpawnManager.Instance.boardWidth;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if(ItemSpawnManager.Instance.pieceList[x, y] != null)
+                {
+                    if(x < width - 1)
+                    {
+                        //Swap and check horizontal
+                        if(SwitchAndCheck(x, y, Vector2.right, false))
+                        {
+                            return false;
+                        }
+                    }
+                    if(y < height - 1)
+                    {
+                        //Swap and check vertical
+                        if(SwitchAndCheck(x, y, Vector2.up, false))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
+    private void SolveDeadlock()
+    {
+        int width = ItemSpawnManager.Instance.boardWidth;
+        int height = ItemSpawnManager.Instance.boardHeight;
+        var pieceList = ItemSpawnManager.Instance.pieceList;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if(pieceList[x, y] != null)
+                {
+                    int rndX = Random.Range(0, width);
+                    int rndY = Random.Range(0, height);
+
+                    GameObject holder = pieceList[x, y];
+                    pieceList[x, y] = pieceList[rndX, rndY];
+                    pieceList[rndX, rndY] = holder;
+
+                    // pieceList[x, y].transform.position = new Vector2((int)rndX, (int)rndY);
+                    // pieceList[rndX, rndY].transform.position = new Vector2((int)x, (int)y);
+
+                    pieceList[x, y].GetComponent<Piece>().column = x;
+                    pieceList[x, y].GetComponent<Piece>().row = y;
+
+                    pieceList[rndX, rndY].GetComponent<Piece>().column = rndX;
+                    pieceList[rndX, rndY].GetComponent<Piece>().row = rndY;
+
+                    pieceList[x, y].GetComponent<Piece>().ResetMovingValues();
+                    pieceList[rndX, rndY].GetComponent<Piece>().ResetMovingValues();
+                }
+            }
+        }
+        if(OnlyCheckMatches(false))
+        {
+            SolveDeadlock();
+        }
+    }
+    #region Finding Possible Matches
     private void SwitchPieces(int column, int row, Vector2 dir)
     {
         int newColumn = column + (int)dir.x;
         int newRow = row + (int)dir.y;
+
         var pieceList = ItemSpawnManager.Instance.pieceList;
         if(newColumn < ItemSpawnManager.Instance.boardWidth
         && newRow < ItemSpawnManager.Instance.boardHeight)
@@ -201,11 +279,11 @@ public class FindMatches : MonoBehaviour
             }
         }
     }
-    public bool SwitchAndCheck(int column, int row, Vector2 dir)
+    public bool SwitchAndCheck(int column, int row, Vector2 dir, bool isItHint)
     {
         SwitchPieces(column, row, dir);
 
-        if(OnlyCheckMatches())
+        if(OnlyCheckMatches(isItHint))
         {
             SwitchPieces(column, row, dir);
             return true;
@@ -213,7 +291,7 @@ public class FindMatches : MonoBehaviour
         SwitchPieces(column, row, dir);
         return false;
     }
-    public bool OnlyCheckMatches()
+    public bool OnlyCheckMatches(bool isItHint)
     {
         var pieceList = ItemSpawnManager.Instance.pieceList;
         for (int x = 0; x < ItemSpawnManager.Instance.boardWidth; x++)
@@ -230,7 +308,9 @@ public class FindMatches : MonoBehaviour
 
                         if(currentObj.CompareTag(leftObj.tag) && currentObj.CompareTag(leftLeftObj.tag))
                         {
-                            HintGiver.Instance.AddPossibleMatches(new List<GameObject> {currentObj, leftObj, leftLeftObj});
+                            if(isItHint)
+                                HintGiver.Instance.AddPossibleMatches(new List<GameObject> {currentObj, leftObj, leftLeftObj});
+
                             return true;
                         }
                     }
@@ -245,7 +325,9 @@ public class FindMatches : MonoBehaviour
 
                         if(currentObj.CompareTag(downObj.tag) && currentObj.CompareTag(downDownObj.tag))
                         {
-                            HintGiver.Instance.AddPossibleMatches(new List<GameObject> {currentObj, downObj, downDownObj});
+                            if(isItHint)
+                                HintGiver.Instance.AddPossibleMatches(new List<GameObject> {currentObj, downObj, downDownObj});
+
                             return true;
                         }
                     }
@@ -254,4 +336,5 @@ public class FindMatches : MonoBehaviour
         }
         return false;
     }
+    #endregion
 }

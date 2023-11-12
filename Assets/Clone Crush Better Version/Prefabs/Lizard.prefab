@@ -143,8 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50e585381f0c3b4681b1cc42774ed0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lerpSpeed: 0.1
   column: 0
   row: 0
-  lerpSpeed: 0.1
-  targetPos: {x: 0, y: 0}
-  currentPos: {x: 0, y: 0}
+  isShuffled: 0

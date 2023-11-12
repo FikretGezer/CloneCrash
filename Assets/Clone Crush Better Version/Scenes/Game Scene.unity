@@ -357,7 +357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15dca47f1a798249bf652c64f9850c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a: []
+  flashingSpeed: 1
+  hintShowingTime: 3
 --- !u!4 &1035857427
 Transform:
   m_ObjectHideFlags: 0

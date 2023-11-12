@@ -174,7 +174,8 @@ public class ItemSpawnManager : MonoBehaviour
         piece.GetComponent<Piece>().column = x;
         piece.GetComponent<Piece>().row = y;
         piece.transform.SetParent(parentPieces.transform);
-        piece.GetComponent<Piece>().current = 0f;
-        piece.GetComponent<Piece>().IsMoving = true;
+        // piece.GetComponent<Piece>().current = 0f;
+        // piece.GetComponent<Piece>().isMoving = true;
+        piece.GetComponent<Piece>().ResetMovingValues();
     }
 }

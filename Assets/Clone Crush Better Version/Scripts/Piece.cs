@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
+    [SerializeField] private float lerpSpeed = 2f;
+
     public int column;
     public int row;
-    public float lerpSpeed = 2f;
-    public bool IsMoving { get; set; }
-    public float current = 1f, target = 1f;
+    public bool isShuffled;
+
+    private bool isMoving;
+    private float current = 1f;
+    private float target = 1f;
     private void Update() {
-        if(IsMoving)
+        if(isMoving)
         {
             if(current != target)
             {
@@ -21,26 +25,22 @@ public class Piece : MonoBehaviour
             }
             else
             {
-                IsMoving = false;
+                isMoving = false;
                 transform.position = new Vector2((int)column, (int)row);
             }
         }
-        // if(IsMoving)
-        // {
-        //     //IsMoving = false;
-        //     //StartCoroutine(MoveObject());
-        // }
-        // else{
-        //     current = 0f;
-        //     IsMoving = false;
-        // }
+    }
+    public void ResetMovingValues()
+    {
+        current = 0f;
+        isMoving = true;
     }
     public void MoveObjectCor()
     {
         StartCoroutine(MoveObject());
-        if(IsMoving)
+        if(isMoving)
         {
-            IsMoving = false;
+            isMoving = false;
         }
     }
     private IEnumerator MoveObject()

@@ -35,6 +35,7 @@ public class ItemController : MonoBehaviour
                 {
                     startPos = pos.origin;
                     selectedPiece = hit.collider.GetComponent<Piece>();
+                    HintGiver.Instance.ResetHint();
                 }
             }
             if(Input.GetMouseButtonUp(0))
