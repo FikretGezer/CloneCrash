@@ -9,6 +9,7 @@ public class Piece : MonoBehaviour
     public int column;
     public int row;
     public bool isShuffled;
+    public bool isMatched;
 
     private bool isMoving;
     private float current = 1f;
@@ -54,5 +55,9 @@ public class Piece : MonoBehaviour
             yield return null;
         }
         transform.position = targetPos;
+    }
+
+    private void OnEnable() {
+        isMatched = false;
     }
 }

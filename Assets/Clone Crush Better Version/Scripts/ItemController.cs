@@ -50,13 +50,14 @@ public class ItemController : MonoBehaviour
                         isSwapStarted = true;
                         isThereAMatch = false;
 
-                        var actualDir = CheckDirection(dir.normalized);
-                        SwapObjects(actualDir);
+                        swapDir = CheckDirection(dir.normalized);
+                        SwapObjects(swapDir);
                     }
                 }
             }
         }
     }
+    private string swapDir = "";
     private void SwapObjects(string direction)
     {
         column = selectedPiece.column;
@@ -156,7 +157,25 @@ public class ItemController : MonoBehaviour
             else //There is a match
             {
                 //Complete the swapping
+                var swipeDir = "";
+                if(swapDir != "")
+                {
+                    if(swapDir == "Right" || swapDir == "Left") swipeDir = "Horizontal";
+                    else swipeDir = "Vertical";
+                }
+                if(swipeDir != "")
+                {
+                    BombController.Instance.CanBombBeCreated(column, row, swipeDir);
+                    BombController.Instance.CanBombBeCreated(targetColumn, targetRow, swipeDir);
+                }
+
+                yield return new WaitForSeconds(0.4f);
+
                 FindMatches.Instance.DestroyMatches();
+
+                yield return new WaitForSeconds(0.1f);
+                BombController.Instance.ActivateBombs();
+
                 selectedPiece = null;
                 moveState = MoveState.Move;
             }

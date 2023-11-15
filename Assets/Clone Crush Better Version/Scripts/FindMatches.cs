@@ -37,13 +37,16 @@ public class FindMatches : MonoBehaviour
 
                         if(currentObj.CompareTag(leftObj.tag) && currentObj.CompareTag(leftLeftObj.tag))
                         {
-                            Debug.Log("Horizontal Match");
+                            //Debug.Log("Horizontal Match");
                             AddToTheList(currentObj);
                             AddToTheList(leftObj);
                             AddToTheList(leftLeftObj);
 
+                            currentObj.GetComponent<Piece>().isMatched = true;
+                            leftObj.GetComponent<Piece>().isMatched = true;
+                            leftLeftObj.GetComponent<Piece>().isMatched = true;
+
                             isThereAMatch = true;
-                            //return true;
                         }
                     }
                 }
@@ -57,13 +60,16 @@ public class FindMatches : MonoBehaviour
 
                         if(currentObj.CompareTag(downObj.tag) && currentObj.CompareTag(downDownObj.tag))
                         {
-                            Debug.Log("Vertical Match");
+                            //Debug.Log("Vertical Match");
                             AddToTheList(currentObj);
                             AddToTheList(downObj);
                             AddToTheList(downDownObj);
 
+                            currentObj.GetComponent<Piece>().isMatched = true;
+                            downObj.GetComponent<Piece>().isMatched = true;
+                            downDownObj.GetComponent<Piece>().isMatched = true;
+
                             isThereAMatch = true;
-                            //return true;
                         }
                     }
                 }
@@ -71,14 +77,14 @@ public class FindMatches : MonoBehaviour
         }
         if(matches.Count > 0)
         {
-            Debug.Log("It works");
+            //Debug.Log("It works");
             MatchCounter();
         }
 
         if(isThereAMatch) return true;
         return false;
     }
-    private void AddToTheList(GameObject obj)
+    public void AddToTheList(GameObject obj)
     {
         if(!matches.Contains(obj))
         {
@@ -140,9 +146,10 @@ public class FindMatches : MonoBehaviour
             StartCoroutine(nameof(MoveTheBoardCo));
         }
     }
-    private IEnumerator MoveTheBoardCo()
+    private IEnumerator MoveTheBoardCo()//Moves objects after a match
     {
         ItemController.Instance.moveState = MoveState.Stop;
+
         yield return new WaitForSeconds(0.4f);
 
         for (int x = 0; x < ItemSpawnManager.Instance.boardWidth; x++)
