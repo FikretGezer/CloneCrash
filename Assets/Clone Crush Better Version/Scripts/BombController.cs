@@ -227,9 +227,9 @@ public class BombController : MonoBehaviour
         var startRow = row - 1;
         var pieceList = ItemSpawnManager.Instance.pieceList;
 
-        for (int x = startColumn; x < 3; x++)
+        for (int x = startColumn; x < startColumn + 3; x++)
         {
-            for (int y = startRow; y < 3; y++)
+            for (int y = startRow; y < startRow + 3; y++)
             {
                 if(x >= 0 && x < ItemSpawnManager.Instance.boardWidth && y >= 0 && y < ItemSpawnManager.Instance.boardHeight)
                 {
