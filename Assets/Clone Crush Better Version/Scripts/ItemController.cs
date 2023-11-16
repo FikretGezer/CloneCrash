@@ -206,22 +206,22 @@ public class ItemController : MonoBehaviour
     }
     private void ActivateBombs(int column, int row, int targetColumn, int targetRow)
     {
-        if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.RowBomb)
+        if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.AdjacentBomb)
         {
-            BombController.Instance.ActivateColumnBomb(row);
-        }
-        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.ColumnBomb)
-        {
-            BombController.Instance.ActivateRowBomb(column);
+            BombController.Instance.ActivateAdjacentBomb(column, row);
         }
         else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.ColorBomb)
         {
             FindMatches.Instance.AddToTheList(ItemSpawnManager.Instance.pieceList[column, row]);
             BombController.Instance.ActivateColorBomb(targetColumn, targetRow);
         }
-        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.AdjacentBomb)
+        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.RowBomb)
         {
-            BombController.Instance.ActivateAdjacentBomb(column, row);
+            BombController.Instance.ActivateColumnBomb(row);
+        }
+        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.ColumnBomb)
+        {
+            BombController.Instance.ActivateRowBomb(column);
         }
     }
     private string CheckDirection(Vector2 dir)
