@@ -147,12 +147,17 @@ public class ItemController : MonoBehaviour
         {
             isThereAMatch = FindMatches.Instance.MatchFinding();
             isSwapStarted = false;
+            if(ItemSpawnManager.Instance.pieceList[column, row].tag == "Bomb"
+            || ItemSpawnManager.Instance.pieceList[targetColumn, targetRow].tag == "Bomb") //this is a bomb
+            {
+                Debug.Log("bomb");
+                isThereAMatch = true;
+            }
             if(!isThereAMatch)//No match
             {
                 //Swap back pieces
                 Swapping(targetColumn, targetRow, column, row);
                 checkCount++;
-                //isThereAMatch = false;
             }
             else //There is a match
             {
@@ -165,8 +170,20 @@ public class ItemController : MonoBehaviour
                 }
                 if(swipeDir != "")
                 {
-                    BombController.Instance.CanBombBeCreated(column, row, swipeDir);
-                    BombController.Instance.CanBombBeCreated(targetColumn, targetRow, swipeDir);
+                    //We're checking is the object a bomb
+                    if(ItemSpawnManager.Instance.pieceList[column, row].tag != "Bomb")
+                        BombController.Instance.CanBombBeCreated(column, row, swipeDir);
+                    else//object is a bomb
+                    {
+                        ActivateBombs(column, row, targetColumn, targetRow);
+                    }
+                    //We're checking is the object a bomb
+                    if(ItemSpawnManager.Instance.pieceList[targetColumn, targetRow].tag != "Bomb")
+                        BombController.Instance.CanBombBeCreated(targetColumn, targetRow, swipeDir);
+                    else//object is a bomb
+                    {
+                        ActivateBombs(targetColumn, targetRow, column, row);
+                    }
                 }
 
                 yield return new WaitForSeconds(0.4f);
@@ -174,7 +191,7 @@ public class ItemController : MonoBehaviour
                 FindMatches.Instance.DestroyMatches();
 
                 yield return new WaitForSeconds(0.1f);
-                BombController.Instance.ActivateBombs();
+                BombController.Instance.SpawnBombs();
 
                 selectedPiece = null;
                 moveState = MoveState.Move;
@@ -186,7 +203,26 @@ public class ItemController : MonoBehaviour
             selectedPiece = null;
             moveState = MoveState.Move;
         }
-
+    }
+    private void ActivateBombs(int column, int row, int targetColumn, int targetRow)
+    {
+        if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.RowBomb)
+        {
+            BombController.Instance.ActivateColumnBomb(row);
+        }
+        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.ColumnBomb)
+        {
+            BombController.Instance.ActivateRowBomb(column);
+        }
+        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.ColorBomb)
+        {
+            FindMatches.Instance.AddToTheList(ItemSpawnManager.Instance.pieceList[column, row]);
+            BombController.Instance.ActivateColorBomb(targetColumn, targetRow);
+        }
+        else if(ItemSpawnManager.Instance.pieceList[column, row].GetComponent<Bomb>().bombType == BombType.AdjacentBomb)
+        {
+            BombController.Instance.ActivateAdjacentBomb(column, row);
+        }
     }
     private string CheckDirection(Vector2 dir)
     {

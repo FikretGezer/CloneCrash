@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 1406772745478879220}
   - component: {fileID: 7862213204172654759}
   - component: {fileID: 7116443993063910432}
+  - component: {fileID: 8017230006166171965}
   m_Layer: 6
   m_Name: ColorBomb
-  m_TagString: Untagged
+  m_TagString: Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,3 +149,16 @@ MonoBehaviour:
   row: 0
   isShuffled: 0
   isMatched: 0
+--- !u!114 &8017230006166171965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687939980638548485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 949823982496ecd4296635e8a08ae98e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bombType: 4

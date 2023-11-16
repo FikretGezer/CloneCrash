@@ -112,7 +112,7 @@ public class FindMatches : MonoBehaviour
             {
                 if(horCount > 2)
                 {
-                    Debug.Log("Ver Match Count: " + horCount);
+                    // Debug.Log("Ver Match Count: " + horCount);
                     horCount = 1;
                 }
             }
@@ -125,7 +125,7 @@ public class FindMatches : MonoBehaviour
             {
                 if(verCount > 2)
                 {
-                    Debug.Log("Hor Match Count: " + verCount);
+                    // Debug.Log("Hor Match Count: " + verCount);
                     verCount = 1;
                 }
             }
