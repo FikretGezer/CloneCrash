@@ -171,14 +171,14 @@ public class ItemController : MonoBehaviour
                 if(swipeDir != "")
                 {
                     //We're checking is the object a bomb
-                    if(ItemSpawnManager.Instance.pieceList[column, row].tag != "Bomb")
+                    if(ItemSpawnManager.Instance.pieceList[column, row] != null && ItemSpawnManager.Instance.pieceList[column, row].tag != "Bomb")
                         BombController.Instance.CanBombBeCreated(column, row, swipeDir);
                     else//object is a bomb
                     {
                         ActivateBombs(column, row, targetColumn, targetRow);
                     }
                     //We're checking is the object a bomb
-                    if(ItemSpawnManager.Instance.pieceList[targetColumn, targetRow].tag != "Bomb")
+                    if(ItemSpawnManager.Instance.pieceList[targetColumn, targetRow] != null && ItemSpawnManager.Instance.pieceList[targetColumn, targetRow].tag != "Bomb")
                         BombController.Instance.CanBombBeCreated(targetColumn, targetRow, swipeDir);
                     else//object is a bomb
                     {
