@@ -89,6 +89,10 @@ public class FindMatches : MonoBehaviour
         if(!matches.Contains(obj))
         {
             matches.Add(obj);
+            if(obj.GetComponent<Bomb>() != null)
+            {
+                ActivateBombs(obj);
+            }
         }
     }
     private void MatchCounter()
@@ -342,6 +346,33 @@ public class FindMatches : MonoBehaviour
             }
         }
         return false;
+    }
+    private void ActivateBombs(GameObject item)
+    {
+        int column = item.GetComponent<Piece>().column;
+        int row = item.GetComponent<Piece>().row;
+
+        if(item.GetComponent<Bomb>().bombType == BombType.AdjacentBomb)
+        {
+            BombController.Instance.ActivateAdjacentBomb(column, row);
+        }
+        else if(item.GetComponent<Bomb>().bombType == BombType.ColorBomb)
+        {
+            int targetColumn = column + 1;
+            if(targetColumn < ItemSpawnManager.Instance.boardWidth && ItemSpawnManager.Instance.pieceList[targetColumn, row] != null)
+                BombController.Instance.ActivateColorBomb(targetColumn, row);
+            else if(targetColumn - 2 >= 0 && ItemSpawnManager.Instance.pieceList[targetColumn - 2, row] != null)
+                BombController.Instance.ActivateColorBomb(targetColumn - 2, row);
+
+        }
+        else if(item.GetComponent<Bomb>().bombType == BombType.RowBomb)
+        {
+            BombController.Instance.ActivateColumnBomb(row);
+        }
+        else if(item.GetComponent<Bomb>().bombType == BombType.ColumnBomb)
+        {
+            BombController.Instance.ActivateRowBomb(column);
+        }
     }
     #endregion
 }
