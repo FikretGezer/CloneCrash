@@ -587,15 +587,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f52b206c959d304ab8ba64a30fd0f44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardLayout: {fileID: 0}
   boardWidth: 5
-  boardHeight: 10
+  boardHeight: 5
   bgTilePrefab: {fileID: 549382634649657394, guid: 57c2293741ca2aa48b02f1928b55e629,
     type: 3}
   piecePrefabs:
   - {fileID: 2933357532614951807, guid: dc4ddf6e6db9f1f4fb0231fd4c1faf0c, type: 3}
   - {fileID: 2933357532614951807, guid: 0a0dd3dd15e537943bb211618be4ba77, type: 3}
   - {fileID: 2933357532614951807, guid: af19ce7c42f6c9849af5bac071951276, type: 3}
-  specialTiles: []
+  breakableTile: {fileID: 549382634649657394, guid: 1ab046c6d6d1ea74eaef491c79464ac3,
+    type: 3}
+  iceTile: {fileID: 549382634649657394, guid: 684c9ae5842018246a5b2517aa2ce165, type: 3}
+  specialTiles:
+  - column: 2
+    row: 2
+    type: 0
+  - column: 3
+    row: 2
+    type: 0
+  - column: 3
+    row: 3
+    type: 1
+  - column: 2
+    row: 3
+    type: 2
 --- !u!4 &1975425000
 Transform:
   m_ObjectHideFlags: 0

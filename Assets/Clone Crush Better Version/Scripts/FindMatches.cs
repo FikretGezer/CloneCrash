@@ -12,11 +12,12 @@ public class FindMatches : MonoBehaviour
     private void LateUpdate() {
         if(Input.GetKeyDown(KeyCode.F))
         {
-            if(!IsDeadlocked())
-            {
-                //ItemController.Instance.moveState = MoveState.Stop;
-                SolveDeadlock();
-            }
+            SolveDeadlock();
+        }
+        if(!IsDeadlocked())
+        {
+            //ItemController.Instance.moveState = MoveState.Stop;
+            SolveDeadlock();
         }
     }
     public bool MatchFinding()
@@ -160,11 +161,13 @@ public class FindMatches : MonoBehaviour
         {
             for (int y = 0; y < ItemSpawnManager.Instance.boardHeight; y++)
             {
-                if(ItemSpawnManager.Instance.pieceList[x, y] == null)
+                if(ItemSpawnManager.Instance.pieceList[x, y] == null && !ItemSpawnManager.Instance.blankTiles[x, y]
+                && ItemSpawnManager.Instance.breakableTiles[x, y] == null && ItemSpawnManager.Instance.iceTiles[x, y] == null)
                 {
                     for (int i = y + 1; i < ItemSpawnManager.Instance.boardHeight; i++)
                     {
-                        if(ItemSpawnManager.Instance.pieceList[x, i] != null)
+                        if(ItemSpawnManager.Instance.pieceList[x, i] != null && !ItemSpawnManager.Instance.blankTiles[x, i]
+                        && ItemSpawnManager.Instance.breakableTiles[x, i] == null && ItemSpawnManager.Instance.iceTiles[x, i] == null)
                         {
                             //Get moving obj
                             var movingObj = ItemSpawnManager.Instance.pieceList[x, i];
@@ -257,6 +260,15 @@ public class FindMatches : MonoBehaviour
                 {
                     int rndX = Random.Range(0, width);
                     int rndY = Random.Range(0, height);
+
+                    int counter = 0;
+                    while(pieceList[rndX, rndY] == null && counter < 100)
+                    {
+                        rndX = Random.Range(0, width);
+                        rndY = Random.Range(0, height);
+
+                        counter++;
+                    }
 
                     GameObject holder = pieceList[x, y];
                     pieceList[x, y] = pieceList[rndX, rndY];

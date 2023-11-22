@@ -64,6 +64,8 @@ public class HintGiver : MonoBehaviour
         {
             foreach(var piece in selectedList)
             {
+                if(piece == null)
+                    break;
                 piece.GetComponent<SpriteRenderer>().color = Color.white;
             }
             selectedList = null;

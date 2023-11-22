@@ -109,43 +109,48 @@ public class BombController : MonoBehaviour
     }
     private bool IsItAdjacent(int column, int row)
     {
-        var pieceList = ItemSpawnManager.Instance.pieceList;
+        // var pieceList = ItemSpawnManager.Instance.pieceList;
 
-        if(column - 2 >= 0 && column + 2 < ItemSpawnManager.Instance.boardWidth
-        && row - 2 >= 0 && row + 2 < ItemSpawnManager.Instance.boardHeight)
-        {
-            //LEFT
-            var currentObj = pieceList[column, row];
-            var leftObj = pieceList[column - 1, row];
-            var leftLeftObj = pieceList[column - 2, row];
-            //RIGHT
-            var rightObj = pieceList[column + 2, row];
-            var rightRightObj = pieceList[column + 2, row];
-            //UP
-            var upObj = pieceList[column, row + 1];
-            var upUpObj = pieceList[column, row + 2];
-            //DOWN
-            var downObj = pieceList[column, row - 1];
-            var downDownObj = pieceList[column, row - 2];
+        // if(column - 2 >= 0 && column + 2 < ItemSpawnManager.Instance.boardWidth
+        // && row - 2 >= 0 && row + 2 < ItemSpawnManager.Instance.boardHeight)
+        // {
+        //     //LEFT
+        //     var currentObj = pieceList[column, row];
+        //     var leftObj = pieceList[column - 1, row];
+        //     var leftLeftObj = pieceList[column - 2, row];
+        //     //RIGHT
+        //     var rightObj = pieceList[column + 2, row];
+        //     var rightRightObj = pieceList[column + 2, row];
+        //     //UP
+        //     var upObj = pieceList[column, row + 1];
+        //     var upUpObj = pieceList[column, row + 2];
+        //     //DOWN
+        //     var downObj = pieceList[column, row - 1];
+        //     var downDownObj = pieceList[column, row - 2];
 
-            if((currentObj.tag == leftObj.tag && currentObj.tag == leftLeftObj.tag)
-            || (currentObj.tag == rightObj.tag && currentObj.tag == rightRightObj.tag))//Horizontal match
-            {
-                if((currentObj.tag == upObj.tag && currentObj.tag == upUpObj.tag)
-                || (currentObj.tag == downObj.tag && currentObj.tag == downDownObj.tag))//Vertical Match
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //     if((leftObj != null && leftLeftObj != null && currentObj.tag == leftObj.tag && currentObj.tag == leftLeftObj.tag)
+        //     || (rightObj != null && rightRightObj != null && currentObj.tag == rightObj.tag && currentObj.tag == rightRightObj.tag))//Horizontal match
+        //     {
+        //         if(currentObj != null)
+        //         {
+        //             if((upObj != null && upUpObj != null && currentObj.tag == upObj.tag && currentObj.tag == upUpObj.tag)
+        //             || (downObj != null && downDownObj != null && currentObj.tag == downObj.tag && currentObj.tag == downDownObj.tag))//Vertical Match
+        //             {
+        //                 return true;
+        //             }
+        //             else
+        //             {
+        //                 return false;
+        //             }
+        //         }
+        //         else
+        //             return false;
+        //     }
+        //     else
+        //     {
+        //         return false;
+        //     }
+        // }
         return false;
     }
     private void MakeTheActualBomb(int column, int row, BombType bombType)
