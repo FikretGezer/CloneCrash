@@ -176,11 +176,6 @@ public class FindMatches : MonoBehaviour
                             movingObj.GetComponent<Piece>().row = y;
 
                             //Set position
-                            // movingObj.transform.position = new Vector2((int)x, (int)y);
-                            //movingObj.GetComponent<Piece>().IsMoving = true;
-                            //movingObj.GetComponent<Piece>().MoveObjectCor();
-                            // movingObj.GetComponent<Piece>().current = 0f;
-                            // movingObj.GetComponent<Piece>().isMoving = true;
                             movingObj.GetComponent<Piece>().ResetMovingValues();
                             break;
                         }
@@ -189,19 +184,33 @@ public class FindMatches : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(0.4f);
+        ItemSpawnManager.Instance.FillTheBoard();
+        yield return new WaitForSeconds(0.5f);
         //Check is there is any matches
         MatchFinding();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.4f);
         if(matches.Count > 0)
         {
             DestroyMatches();
         }
         else
         {
-            ItemSpawnManager.Instance.FillTheBoard();
-            yield return new WaitForSeconds(0.4f);
             ItemController.Instance.moveState = MoveState.Move;
         }
+        // yield return new WaitForSeconds(0.4f);
+        // //Check is there is any matches
+        // MatchFinding();
+        // yield return new WaitForSeconds(0.4f);
+        // if(matches.Count > 0)
+        // {
+        //     DestroyMatches();
+        // }
+        // else
+        // {
+        //     ItemSpawnManager.Instance.FillTheBoard();
+        //     yield return new WaitForSeconds(0.4f);
+        //     ItemController.Instance.moveState = MoveState.Move;
+        // }
     }
     private bool IsDeadlocked()
     {

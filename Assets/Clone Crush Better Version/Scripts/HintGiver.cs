@@ -23,18 +23,23 @@ public class HintGiver : MonoBehaviour
     }
     private void Update()
     {
-        // if(hintReseted)
-        //     HintTimer();
-        // if(canShowHint)
-        // {
-        //     canShowHint = false;
-        //     ShowTheHint();
-        // }
-        // if(Input.GetKeyDown(KeyCode.S))
-        // {
-        //     ResetHint();
-        // }
-        // PlayHintAnimation();
+        if(ItemController.Instance.moveState == MoveState.Move)
+        {
+            if(hintReseted)
+                HintTimer();
+            if(canShowHint)
+            {
+                canShowHint = false;
+                ShowTheHint();
+            }
+            if(Input.GetKeyDown(KeyCode.S))
+            {
+                ResetHint();
+            }
+            PlayHintAnimation();
+        }
+        else
+            ResetHint();
     }
     private void HintTimer()
     {
@@ -99,6 +104,8 @@ public class HintGiver : MonoBehaviour
                 current = Mathf.MoveTowards(current, target, flashingSpeed * Time.deltaTime);
                 foreach(var piece in selectedList)
                 {
+                    if(piece == null)
+                        break;
                     piece.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, new Color(0.5f, 0.5f, 0.5f, 1f), current);
                 }
 
