@@ -31,8 +31,8 @@ public class ItemSpawnManager : MonoBehaviour
 
     [Header("Arrays To Hold Pieces")]
     public GameObject[,] pieceList; //Holds piece
-    public GameObject[,] breakableTiles; // holds blanks parts
-    public GameObject[,] iceTiles; // holds blanks parts
+    public GameObject[,] breakableTiles; // Holds breakables: this type of tiles can't contain piece
+    public GameObject[,] iceTiles; // Holds iceTiles: this type of tiles can contain piece
     public bool[,] blankTiles; // holds blanks parts
 
     //Parent for spawns
@@ -121,13 +121,16 @@ public class ItemSpawnManager : MonoBehaviour
         {
             for (int y = 0; y < boardHeight; y++)
             {
-                if(!blankTiles[x, y] && breakableTiles[x, y] == null && iceTiles[x, y] == null)
+                if(!blankTiles[x, y] && breakableTiles[x, y] == null)
                 {
                     Vector2 instantiatePosition = new Vector2(x, y);
 
                     //Create tiles
-                    var tile = Instantiate(bgTilePrefab, instantiatePosition, Quaternion.identity);
-                    tile.transform.SetParent(parentTile.transform);
+                    if(iceTiles[x, y] == null)
+                    {
+                        var tile = Instantiate(bgTilePrefab, instantiatePosition, Quaternion.identity);
+                        tile.transform.SetParent(parentTile.transform);
+                    }
 
                     //Create Actual Pieces
                     int rnd = Random.Range(0, piecePrefabs.Length);
@@ -159,10 +162,10 @@ public class ItemSpawnManager : MonoBehaviour
         leftTag = leftLeftTag = string.Empty;
 
         //Get the tags
-        if(x - 1 > 0 && pieceList[x - 1, y] != null && !blankTiles[x - 1, y])
+        if(x - 1 > 0 && pieceList[x - 1, y] != null /*&& !blankTiles[x - 1, y]*/)
             leftTag = pieceList[x - 1, y].tag;
 
-        if(x - 2 >= 0 && pieceList[x - 2, y] != null && !blankTiles[x - 2, y])
+        if(x - 2 >= 0 && pieceList[x - 2, y] != null /*&& !blankTiles[x - 2, y]*/)
             leftLeftTag = pieceList[x - 2, y].tag;
 
         //Compare the tags
@@ -179,10 +182,10 @@ public class ItemSpawnManager : MonoBehaviour
         downDownTag = downTag = string.Empty;
 
         //Get the tags
-        if(y - 1 > 0 && pieceList[x, y - 1] != null && !blankTiles[x, y - 1])
+        if(y - 1 > 0 && pieceList[x, y - 1] != null /*&& !blankTiles[x, y - 1]*/)
             downTag = pieceList[x, y - 1].tag;
 
-        if(y - 2 >= 0 && pieceList[x, y - 2] != null && !blankTiles[x, y - 2])
+        if(y - 2 >= 0 && pieceList[x, y - 2] != null /*&& !blankTiles[x, y - 2]*/)
             downDownTag = pieceList[x, y - 2].tag;
 
         //Compare the tags
@@ -197,7 +200,7 @@ public class ItemSpawnManager : MonoBehaviour
         {
             for (int y = 0; y < boardHeight; y++)
             {
-                if(pieceList[x, y] == null && !blankTiles[x, y] && breakableTiles[x, y] == null && iceTiles[x, y] == null)
+                if(pieceList[x, y] == null && !blankTiles[x, y] && breakableTiles[x, y] == null)
                 {
                     CreateNewPiece(x, y);
                 }

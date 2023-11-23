@@ -607,10 +607,10 @@ MonoBehaviour:
     row: 2
     type: 0
   - column: 3
-    row: 3
+    row: 0
     type: 1
   - column: 2
-    row: 3
+    row: 0
     type: 2
 --- !u!4 &1975425000
 Transform:

@@ -36,6 +36,10 @@ public class ItemController : MonoBehaviour
                     startPos = pos.origin;
                     selectedPiece = hit.collider.GetComponent<Piece>();
                     HintGiver.Instance.ResetHint();
+                    int column = selectedPiece.column;
+                    int row = selectedPiece.row;
+                    if(ItemSpawnManager.Instance.iceTiles[column, row] != null)
+                        selectedPiece = null;
                 }
             }
             if(Input.GetMouseButtonUp(0))
@@ -62,9 +66,10 @@ public class ItemController : MonoBehaviour
     {
         column = selectedPiece.column;
         row = selectedPiece.row;
+        bool isItSpecial = false;
 
         //isThereAMatch = true;
-        if(direction == "Right")
+        if(direction == "Right" && ItemSpawnManager.Instance.iceTiles[column + 1, row] == null)
         {
             if(column + 1 < ItemSpawnManager.Instance.boardWidth && ItemSpawnManager.Instance.pieceList[column + 1, row] != null)
             {
@@ -76,7 +81,7 @@ public class ItemController : MonoBehaviour
                 targetRow = row;
             }
         }
-        else if(direction == "Up")
+        else if(direction == "Up" && ItemSpawnManager.Instance.iceTiles[column, row + 1] == null)
         {
             if(row + 1 < ItemSpawnManager.Instance.boardHeight && ItemSpawnManager.Instance.pieceList[column, row + 1] != null)
             {
@@ -87,7 +92,7 @@ public class ItemController : MonoBehaviour
                 targetRow = row + 1;
             }
         }
-        else if(direction == "Left")
+        else if(direction == "Left" && ItemSpawnManager.Instance.iceTiles[column - 1, row] == null)
         {
             if(column - 1 >= 0 && ItemSpawnManager.Instance.pieceList[column - 1, row] != null){
                 moveState = MoveState.Stop;
@@ -97,7 +102,7 @@ public class ItemController : MonoBehaviour
                 targetRow = row;
             }
         }
-        else if(direction == "Down")
+        else if(direction == "Down" && ItemSpawnManager.Instance.iceTiles[column, row - 1] == null)
         {
             if(row - 1 >= 0 && ItemSpawnManager.Instance.pieceList[column, row - 1] != null){
                 moveState = MoveState.Stop;
@@ -106,6 +111,15 @@ public class ItemController : MonoBehaviour
                 targetColumn = column;
                 targetRow = row - 1;
             }
+        }
+        else
+            isItSpecial = true;
+
+        if(isItSpecial)
+        {
+            selectedPiece = null;
+            isSwapStarted = true;
+            moveState = MoveState.Move;
         }
     }
     private void Swapping(int currentColumn, int currentRow, int targetColumn, int targetRow)

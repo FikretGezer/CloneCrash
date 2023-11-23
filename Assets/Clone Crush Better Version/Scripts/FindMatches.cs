@@ -5,16 +5,27 @@ using UnityEngine;
 public class FindMatches : MonoBehaviour
 {
     public List<GameObject> matches;
+    private List<GameObject> specials;
     public static FindMatches Instance;
+    private GameObject[,] breakableTiles;
+    private GameObject[,] iceTiles;
+    private int boardHeight;
+    private int boardWidth;
     private void Awake() {
         if(Instance == null) Instance = this;
+    }
+    private void Start() {
+        breakableTiles = ItemSpawnManager.Instance.breakableTiles;
+        iceTiles = ItemSpawnManager.Instance.iceTiles;
+        boardHeight = ItemSpawnManager.Instance.boardHeight;
+        boardWidth = ItemSpawnManager.Instance.boardWidth;
     }
     private void LateUpdate() {
         if(Input.GetKeyDown(KeyCode.F))
         {
             SolveDeadlock();
         }
-        if(!IsDeadlocked())
+        if(IsDeadlocked())
         {
             //ItemController.Instance.moveState = MoveState.Stop;
             SolveDeadlock();
@@ -96,6 +107,36 @@ public class FindMatches : MonoBehaviour
             }
         }
     }
+    private void GiveDamageToSpecials(GameObject obj)
+    {
+        int x = obj.GetComponent<Piece>().column;
+        int y = obj.GetComponent<Piece>().row;
+
+
+        //Check is there a special tile around the matched object
+        bool GiveDamage(int column, int row)
+        {
+            if(column < boardWidth && column >= 0 && row < boardWidth && row >= 0)
+            {
+                if(breakableTiles[column, row] != null || iceTiles[column, row] != null)
+                {
+                    if(breakableTiles[column, row] != null) breakableTiles[column, row].GetComponent<SpecialTile>().TakeDamage();
+                    else if(iceTiles[column, row] != null) iceTiles[column, row].GetComponent<SpecialTile>().TakeDamage();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        var left = GiveDamage(x + 1, y);
+        if(left) return;
+        var right = GiveDamage(x - 1, y);
+        if(right) return;
+        var up = GiveDamage(x, y + 1);
+        if(up) return;
+        var down = GiveDamage(x, y - 1);
+        if(down) return;
+    }
     private void MatchCounter()
     {
         int prevX = matches[0].GetComponent<Piece>().column;
@@ -145,6 +186,7 @@ public class FindMatches : MonoBehaviour
             ItemController.Instance.moveState = MoveState.Stop;
             foreach(var item in matches)
             {
+                GiveDamageToSpecials(item);
                 Destroy(item);
             }
             matches.Clear();
@@ -162,12 +204,12 @@ public class FindMatches : MonoBehaviour
             for (int y = 0; y < ItemSpawnManager.Instance.boardHeight; y++)
             {
                 if(ItemSpawnManager.Instance.pieceList[x, y] == null && !ItemSpawnManager.Instance.blankTiles[x, y]
-                && ItemSpawnManager.Instance.breakableTiles[x, y] == null && ItemSpawnManager.Instance.iceTiles[x, y] == null)
+                && ItemSpawnManager.Instance.breakableTiles[x, y] == null /*&& ItemSpawnManager.Instance.iceTiles[x, y] == null*/)
                 {
                     for (int i = y + 1; i < ItemSpawnManager.Instance.boardHeight; i++)
                     {
                         if(ItemSpawnManager.Instance.pieceList[x, i] != null && !ItemSpawnManager.Instance.blankTiles[x, i]
-                        && ItemSpawnManager.Instance.breakableTiles[x, i] == null && ItemSpawnManager.Instance.iceTiles[x, i] == null)
+                        && ItemSpawnManager.Instance.breakableTiles[x, i] == null/* && ItemSpawnManager.Instance.iceTiles[x, i] == null*/)
                         {
                             //Get moving obj
                             var movingObj = ItemSpawnManager.Instance.pieceList[x, i];

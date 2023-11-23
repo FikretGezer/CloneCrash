@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -6998441383814086100}
   m_Layer: 0
   m_Name: BreakableTile
-  m_TagString: lock
+  m_TagString: Breakable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,3 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   column: 0
   row: 0
+  health: 1

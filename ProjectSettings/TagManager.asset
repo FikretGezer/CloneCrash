@@ -23,6 +23,8 @@ TagManager:
   - Dot Pig
   - Dot Rabbit
   - Bomb
+  - Breakable
+  - Ice
   layers:
   - Default
   - TransparentFX
