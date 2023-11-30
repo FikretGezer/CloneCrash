@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88fd918c7a18e2640a4825da35ac21fe, type: 3}
-  m_Name: Level 1
+  m_Name: Level 8
   m_EditorClassIdentifier: 
-  boardWidth: 5
-  boardHeight: 5
+  boardWidth: 6
+  boardHeight: 7
   bgTilePrefab: {fileID: 549382634649657394, guid: 57c2293741ca2aa48b02f1928b55e629,
     type: 3}
   breakableTilePrefab: {fileID: 549382634649657394, guid: 1ab046c6d6d1ea74eaef491c79464ac3,
@@ -28,8 +28,3 @@ MonoBehaviour:
   - {fileID: 2933357532614951807, guid: ae6f18466b3166842be3a59ec3caba19, type: 3}
   - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
   specialTiles: []
-  objectives:
-  - tagg: 5
-    objectiveAmount: 333
-  - tagg: 1
-    objectiveAmount: 1

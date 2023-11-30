@@ -17,7 +17,7 @@ public class ExtraPiece
 }
 public class ItemSpawnManager : MonoBehaviour
 {
-    [SerializeField] private BoardLayoutScriptable boardLayout;
+    [SerializeField] public BoardLayoutScriptable boardLayout;
     [Header("Board Size")]
     public int boardWidth;
     public int boardHeight;

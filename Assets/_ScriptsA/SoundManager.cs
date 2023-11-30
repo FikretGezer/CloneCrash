@@ -18,7 +18,7 @@ public class SoundManager : MonoBehaviour
     private int count = 0;
     public void AddCount()
     {
-        count++;        
+        count++;
     }
     public void SpawnSound()
     {
@@ -33,7 +33,7 @@ public class SoundManager : MonoBehaviour
         if(!allSFX.Contains(sfxItem))
             allSFX.Add(sfxItem);
         var sfxSource = sfxItem.GetComponent<AudioSource>();
-        sfxSource.clip = spawnSound;    
+        sfxSource.clip = spawnSound;
         sfxSource.Play();
 
         //StartCoroutine(DestroySound(sfxItem));
@@ -45,7 +45,7 @@ public class SoundManager : MonoBehaviour
     }
     IEnumerator CreateSoumd()
     {
-        
+
         for (int i = 0; i < count; i++)
         {
             CreateSFX();
@@ -59,7 +59,7 @@ public class SoundManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         foreach (var sfx in allSFX)
         {
-            Destroy(sfx);        
+            Destroy(sfx);
         }
         allSFX.Clear();
     }

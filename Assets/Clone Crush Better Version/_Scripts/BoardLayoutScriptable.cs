@@ -16,4 +16,6 @@ public class BoardLayoutScriptable : ScriptableObject
     [Header("Board Layout")]
     public ExtraPiece[] specialTiles;
 
+    [Header("Level Goal")]
+    public Objective[] objectives;
 }
