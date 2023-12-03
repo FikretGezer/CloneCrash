@@ -62,5 +62,5 @@ public class CameraSizer : MonoBehaviour
             _camera.orthographicSize = (board.width / 2f + padding) / aspectRatio;
         else
             _camera.orthographicSize = board.height / 2f + padding;
-    }   
+    }
 }

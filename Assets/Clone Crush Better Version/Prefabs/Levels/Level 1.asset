@@ -29,7 +29,9 @@ MonoBehaviour:
   - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
   specialTiles: []
   objectives:
-  - tagg: 5
-    objectiveAmount: 333
-  - tagg: 1
+  - objectiveSprite: {fileID: 21300000, guid: 70f40a4dc27664844887fef8de697220, type: 3}
+    tagg: 5
+    objectiveAmount: 5
+  - objectiveSprite: {fileID: 21300000, guid: 393c1fc0c340e8f43871ee1e6525e5c7, type: 3}
+    tagg: 1
     objectiveAmount: 1

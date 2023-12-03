@@ -18,7 +18,7 @@ public class GameData : MonoBehaviour
     public World world;
     public SaveData saveData;
     public int levelsPerPage = 8;
-    
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -27,7 +27,7 @@ public class GameData : MonoBehaviour
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     }
-    
+
     public void Save()
     {
         //Creata a binary formatter that can read binary files
@@ -52,13 +52,13 @@ public class GameData : MonoBehaviour
 
         saveData.currentPageForLevels = lastActive() / levelsPerPage;
 
-        //Create a copy of the save data        
+        //Create a copy of the save data
         SaveData data = new SaveData();
         data = saveData;
 
         //Save the data
         formatter.Serialize(file, data);
-        
+
         //Close the data stream
         file.Close();
 
@@ -85,7 +85,7 @@ public class GameData : MonoBehaviour
     }
     public void IncreaseLastLevel(Board board)
     {
-        if (board.level + 1 < saveData.isActive.Length 
+        if (board.level + 1 < saveData.isActive.Length
             && board.level + 1 < world.levels.Length
             && world.levels[board.level + 1] != null)
         {

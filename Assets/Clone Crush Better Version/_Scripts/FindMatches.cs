@@ -101,6 +101,7 @@ public class FindMatches : MonoBehaviour
         if(!matches.Contains(obj))
         {
             matches.Add(obj);
+            ObjectiveController.Instance.ReduceObjectiveAmount(obj);
             if(obj.GetComponent<Bomb>() != null)
             {
                 ActivateBombs(obj);

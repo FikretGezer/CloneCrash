@@ -17,7 +17,9 @@ public class ExtraPiece
 }
 public class ItemSpawnManager : MonoBehaviour
 {
-    [SerializeField] public BoardLayoutScriptable boardLayout;
+    // [SerializeField] public BoardLayoutScriptable level;
+    [SerializeField] private WorldScriptable world;
+    [field:SerializeField] public int CurrentLevel { get; private set; }
     [Header("Board Size")]
     public int boardWidth;
     public int boardHeight;
@@ -44,20 +46,22 @@ public class ItemSpawnManager : MonoBehaviour
     private void Awake()
     {
         if(Instance == null) Instance = this;
+        CurrentLevel = PlayerPrefs.GetInt("Current Level");
 
+        var level = world.allLevels[CurrentLevel];
         #region SCRIPTABLE
-        if(boardLayout != null)
+        if(level != null)
         {
-            boardWidth = boardLayout.boardWidth;
-            boardHeight = boardLayout.boardHeight;
+            boardWidth = level.boardWidth;
+            boardHeight = level.boardHeight;
 
-            bgTilePrefab = boardLayout.bgTilePrefab;
-            breakableTile = boardLayout.breakableTilePrefab;
-            iceTile = boardLayout.iceTilePrefab;
+            bgTilePrefab = level.bgTilePrefab;
+            breakableTile = level.breakableTilePrefab;
+            iceTile = level.iceTilePrefab;
 
-            piecePrefabs = boardLayout.piecePrefabs;
+            piecePrefabs = level.piecePrefabs;
 
-            specialTiles = boardLayout.specialTiles;
+            specialTiles = level.specialTiles;
         }
         #endregion
 

@@ -11,6 +11,9 @@ public class SpecialTile : MonoBehaviour
     {
         health--;
         if(health <= 0)
+        {
+            ObjectiveController.Instance.ReduceObjectiveAmount(this.gameObject);
             Destroy(this.gameObject);
+        }
     }
 }
