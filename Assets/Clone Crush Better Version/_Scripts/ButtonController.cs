@@ -5,10 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
+    [Header("Menu and Level Selection")]
     [SerializeField] private Transform pageContainer;
     [SerializeField] private bool isAtLevelSelectScreen;
     private List<GameObject> pageList;
     private int currentPage = 0;
+
+    [Header("In Game")]
+    [SerializeField] private GameObject inGameUI;
+    [SerializeField] private GameObject inGamePause;
     private void Start() {
         if(isAtLevelSelectScreen)
         {
@@ -24,6 +29,7 @@ public class ButtonController : MonoBehaviour
             }
         }
     }
+    #region Menu and Level Selection Buttons
     public void LoadLevel(string levelName)
     {
         SceneManager.LoadScene(levelName);
@@ -55,4 +61,26 @@ public class ButtonController : MonoBehaviour
         }
         return pageList;
     }
+    #endregion
+    #region In Game Button
+    public void StopTheGame()
+    {
+        //1-> We can stop the time
+        if(Time.timeScale == 0f)
+        {
+            Time.timeScale = 1f;
+            ItemController.Instance.enabled = true;
+            inGamePause.SetActive(false);
+            inGameUI.SetActive(true);
+        }
+        else
+        {
+            Time.timeScale = 0f;
+            ItemController.Instance.enabled = false;
+            inGameUI.SetActive(false);
+            inGamePause.SetActive(true);
+        }
+        //2-> we can disable scripts
+    }
+    #endregion
 }

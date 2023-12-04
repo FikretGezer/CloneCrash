@@ -23,15 +23,11 @@ MonoBehaviour:
   piecePrefabs:
   - {fileID: 2933357532614951807, guid: dc4ddf6e6db9f1f4fb0231fd4c1faf0c, type: 3}
   - {fileID: 2933357532614951807, guid: 0a0dd3dd15e537943bb211618be4ba77, type: 3}
-  - {fileID: 2933357532614951807, guid: af19ce7c42f6c9849af5bac071951276, type: 3}
-  - {fileID: 2933357532614951807, guid: e1474a53b346ed640806f27b90f370fe, type: 3}
   - {fileID: 2933357532614951807, guid: ae6f18466b3166842be3a59ec3caba19, type: 3}
   - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
   specialTiles: []
   objectives:
   - objectiveSprite: {fileID: 21300000, guid: 70f40a4dc27664844887fef8de697220, type: 3}
     tagg: 5
-    objectiveAmount: 5
-  - objectiveSprite: {fileID: 21300000, guid: 393c1fc0c340e8f43871ee1e6525e5c7, type: 3}
-    tagg: 1
-    objectiveAmount: 1
+    objectiveAmount: 24
+  moveAmount: 1

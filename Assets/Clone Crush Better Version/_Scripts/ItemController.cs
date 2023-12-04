@@ -208,6 +208,7 @@ public class ItemController : MonoBehaviour
                 BombController.Instance.SpawnBombs();
 
                 selectedPiece = null;
+                ObjectiveController.Instance.ReduceMoveCount();
                 moveState = MoveState.Move;
             }
         }

@@ -27,4 +27,24 @@ MonoBehaviour:
   - {fileID: 2933357532614951807, guid: e1474a53b346ed640806f27b90f370fe, type: 3}
   - {fileID: 2933357532614951807, guid: ae6f18466b3166842be3a59ec3caba19, type: 3}
   - {fileID: 2933357532614951807, guid: 4f603332ef9ffca4c8bc90857c4547c8, type: 3}
-  specialTiles: []
+  specialTiles:
+  - column: 2
+    row: 2
+    type: 0
+  - column: 3
+    row: 2
+    type: 0
+  - column: 2
+    row: 4
+    type: 0
+  - column: 3
+    row: 4
+    type: 0
+  objectives:
+  - objectiveSprite: {fileID: 21300000, guid: 1edbb3ceb4a88954f9c241c1b0572b1d, type: 3}
+    tagg: 0
+    objectiveAmount: 40
+  - objectiveSprite: {fileID: 21300000, guid: 70f40a4dc27664844887fef8de697220, type: 3}
+    tagg: 0
+    objectiveAmount: 40
+  moveAmount: 60

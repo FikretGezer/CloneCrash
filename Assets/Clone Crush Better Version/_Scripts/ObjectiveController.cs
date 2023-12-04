@@ -36,14 +36,22 @@ public class ObjectiveController : MonoBehaviour
     [SerializeField] private WorldScriptable levels;
     [SerializeField] private Transform objectiveParent;
     [SerializeField] private GameObject objectivePrefab;
+    [SerializeField] private TMP_Text t_MoveCount;
+    [SerializeField] private Transform inGameMenuContainer;
+    [SerializeField] private Transform endingMenus;
     //UNSERIALIZE LATER
     [SerializeField] private List<CurrentObjectives> objectives;
+
+    public int moveAmount;
     public static ObjectiveController Instance;
     private void Awake() {
         if(Instance == null) Instance = this;
     }
     private void Start() {
         var currentLevel = PlayerPrefs.GetInt("Current Level");
+        moveAmount = levels.allLevels[currentLevel].moveAmount;
+        t_MoveCount.text = moveAmount.ToString();
+
         if(levels != null && levels.allLevels.Length > 0)
         {
             for (int i = 0; i < levels.allLevels[currentLevel].objectives.Length; i++)
@@ -69,6 +77,38 @@ public class ObjectiveController : MonoBehaviour
             }
         }
     }
+    public void ReduceMoveCount()
+    {
+        if(moveAmount - 1 >= 0)
+        {
+            moveAmount--;
+            t_MoveCount.text = moveAmount.ToString();
+            if(moveAmount <= 0)
+            {
+                ActivateEndingMenus("lose");
+                Debug.Log("<color=green>FAILED!!!</color>");
+            }
+        }
+    }
+    private void ActivateEndingMenus(string result)
+    {
+        foreach(Transform menu in inGameMenuContainer)
+        {
+            if(menu != endingMenus)
+                menu.gameObject.SetActive(false);
+        }
+        endingMenus.gameObject.SetActive(true);
+        if(result == "lose")
+        {
+            endingMenus.GetChild(0).gameObject.SetActive(false);
+            endingMenus.GetChild(1).gameObject.SetActive(true);
+        }
+        else if(result == "win")
+        {
+            endingMenus.GetChild(1).gameObject.SetActive(false);
+            endingMenus.GetChild(0).gameObject.SetActive(true);
+        }
+    }
     public void ReduceObjectiveAmount(GameObject destroyedObj)
     {
         var tag = destroyedObj.tag;
@@ -91,7 +131,8 @@ public class ObjectiveController : MonoBehaviour
 
                         if(IsGameDone())
                         {
-                            Debug.Log("<color=red>GAME IS OVER</color>");
+                            ActivateEndingMenus("win");
+                            Debug.Log("<color=red>WIN!!!</color>");
                             GameSaver.Instance.IncreaseLevel(PlayerPrefs.GetInt("Current Level"));
                             SceneManager.LoadScene("Menu");
                         }

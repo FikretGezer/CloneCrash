@@ -18,4 +18,5 @@ public class BoardLayoutScriptable : ScriptableObject
 
     [Header("Level Goal")]
     public Objective[] objectives;
+    public int moveAmount;
 }
