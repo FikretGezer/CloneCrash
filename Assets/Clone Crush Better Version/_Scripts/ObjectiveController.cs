@@ -64,6 +64,7 @@ public class ObjectiveController : MonoBehaviour
 
                 //Instantiate objective holder UIs
                 var obj = Instantiate(objectivePrefab);
+                obj.transform.localScale = Vector3.one;
                 obj.transform.SetParent(objectiveParent);
 
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = curObjective.objectiveSprite;
