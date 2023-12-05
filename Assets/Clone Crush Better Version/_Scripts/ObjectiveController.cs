@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public enum ObjectiveTag
 {
@@ -125,8 +126,9 @@ public class ObjectiveController : MonoBehaviour
                         if(objective.amount <= 0)
                         {
                             objective.amount = 0;
-                            objective.objectiveHolder.SetActive(false);
                             //Play animation for removed objective
+                            objective.objectiveHolder.GetComponent<Animator>().SetTrigger("destroyObjective");
+                            StartCoroutine(DelayDestroying(objective, 0.5f));
                         }
                         objective.amountHolder.text = objective.amount.ToString();
 
@@ -135,13 +137,18 @@ public class ObjectiveController : MonoBehaviour
                             ActivateEndingMenus("win");
                             Debug.Log("<color=red>WIN!!!</color>");
                             GameSaver.Instance.IncreaseLevel(PlayerPrefs.GetInt("Current Level"));
-                            SceneManager.LoadScene("Menu");
+                            // SceneManager.LoadScene("Menu");
                         }
                     }
                 }
             }
 
         }
+    }
+    IEnumerator DelayDestroying(CurrentObjectives objective, float _sec)
+    {
+        yield return new WaitForSeconds(_sec);
+        objective.objectiveHolder.SetActive(false);
     }
     private bool IsGameDone()
     {

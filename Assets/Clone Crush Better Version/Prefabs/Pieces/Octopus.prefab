@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4279610045605242433}
   - component: {fileID: 5964955551305713589}
   - component: {fileID: -4809155972003556852}
+  - component: {fileID: -1527680084273597367}
   m_Layer: 6
   m_Name: Octopus
   m_TagString: Dot Octopus
@@ -147,3 +148,25 @@ MonoBehaviour:
   column: 0
   row: 0
   isShuffled: 0
+  isMatched: 0
+--- !u!95 &-1527680084273597367
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2933357532614951807}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 194bc289a5fbbf442a7c71140afb6caa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

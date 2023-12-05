@@ -35,6 +35,7 @@ public class LevelO : MonoBehaviour
     {
         Debug.Log($"Loading Level {loadingLvl}");
         PlayerPrefs.SetInt("Current Level", int.Parse(loadingLvl) - 1);
-        SceneManager.LoadScene("GameScene");
+        ButtonController.Instance.LoadLevel("GameScene");
+        // SceneManager.LoadScene("GameScene");
     }
 }

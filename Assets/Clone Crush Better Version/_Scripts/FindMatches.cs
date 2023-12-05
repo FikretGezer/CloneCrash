@@ -11,8 +11,11 @@ public class FindMatches : MonoBehaviour
     private GameObject[,] iceTiles;
     private int boardHeight;
     private int boardWidth;
+
+    private AudioSource _audioSource;
     private void Awake() {
         if(Instance == null) Instance = this;
+        _audioSource = Camera.main.GetComponent<AudioSource>();
     }
     private void Start() {
         breakableTiles = ItemSpawnManager.Instance.breakableTiles;
@@ -121,8 +124,16 @@ public class FindMatches : MonoBehaviour
             {
                 if(breakableTiles[column, row] != null || iceTiles[column, row] != null)
                 {
-                    if(breakableTiles[column, row] != null) breakableTiles[column, row].GetComponent<SpecialTile>().TakeDamage();
-                    else if(iceTiles[column, row] != null) iceTiles[column, row].GetComponent<SpecialTile>().TakeDamage();
+                    if(breakableTiles[column, row] != null)
+                    {
+                        SoundController.Instance.PlaySFX(SFXs.breakableTile);
+                        breakableTiles[column, row].GetComponent<SpecialTile>().TakeDamage();
+                    }
+                    else if(iceTiles[column, row] != null)
+                    {
+                        SoundController.Instance.PlaySFX(SFXs.iceTile);
+                        iceTiles[column, row].GetComponent<SpecialTile>().TakeDamage();
+                    }
                     return true;
                 }
             }
@@ -137,6 +148,7 @@ public class FindMatches : MonoBehaviour
         if(up) return;
         var down = GiveDamage(x, y - 1);
         if(down) return;
+        SoundController.Instance.PlaySFX(SFXs.matchSound);
     }
     private void MatchCounter()
     {
@@ -187,6 +199,10 @@ public class FindMatches : MonoBehaviour
             ItemController.Instance.moveState = MoveState.Stop;
             foreach(var item in matches)
             {
+                var effect = EffectSpawnManager.Instance.GetEffectFromPool();
+                effect.transform.position = item.transform.position;
+                effect.SetActive(true);
+
                 GiveDamageToSpecials(item);
                 Destroy(item);
             }

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
+    public AudioSource _audioSource {get; private set;}
+
     [Header("Menu and Level Selection")]
     [SerializeField] private Transform pageContainer;
     [SerializeField] private bool isAtLevelSelectScreen;
@@ -14,6 +16,22 @@ public class ButtonController : MonoBehaviour
     [Header("In Game")]
     [SerializeField] private GameObject inGameUI;
     [SerializeField] private GameObject inGamePause;
+
+    [Header("Image Containers")]
+    [SerializeField] private Image musicImage;
+    [SerializeField] private Image sfxImage;
+
+    public static ButtonController Instance;
+    private void Awake() {
+        if(Instance == null) Instance = this;
+        _audioSource = GetComponent<AudioSource>();
+
+        if(musicImage != null)
+            SoundController.Instance.SetMusicImage(musicImage, GameSaver.Instance.dataSaver.isMusicMuted);
+        if(sfxImage != null)
+            SoundController.Instance.SetSFXImage(sfxImage, GameSaver.Instance.dataSaver.isSFXMuted);
+
+    }
     private void Start() {
         if(isAtLevelSelectScreen)
         {
@@ -32,10 +50,12 @@ public class ButtonController : MonoBehaviour
     #region Menu and Level Selection Buttons
     public void LoadLevel(string levelName)
     {
+        SoundController.Instance.PlaySFX(SFXs.buttonClick);
         SceneManager.LoadScene(levelName);
     }
     public void PreviousPage()
     {
+        SoundController.Instance.PlaySFX(SFXs.buttonClick);
         if(currentPage - 1 >= 0)
         {
             pageList[currentPage].SetActive(false);
@@ -45,6 +65,7 @@ public class ButtonController : MonoBehaviour
     }
     public void NextPage()
     {
+        SoundController.Instance.PlaySFX(SFXs.buttonClick);
         if(currentPage + 1 < pageList.Count)
         {
             pageList[currentPage].SetActive(false);
@@ -65,6 +86,7 @@ public class ButtonController : MonoBehaviour
     #region In Game Button
     public void StopTheGame()
     {
+        SoundController.Instance.PlaySFX(SFXs.buttonClick);
         //1-> We can stop the time
         if(Time.timeScale == 0f)
         {
@@ -82,5 +104,10 @@ public class ButtonController : MonoBehaviour
         }
         //2-> we can disable scripts
     }
+    #endregion
+    #region Sound Buttons
+    public void MuteMusic(Image _image) => SoundController.Instance.MuteMusic(_image);
+    public void MuteSFX(Image _image) => SoundController.Instance.MuteSFX(_image);
+
     #endregion
 }

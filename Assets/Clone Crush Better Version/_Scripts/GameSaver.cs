@@ -8,6 +8,8 @@ using UnityEngine;
 public class DataSaver{
     public bool[] isActive;
     public int currentPageForLevels = 0;
+    public bool isMusicMuted;
+    public bool isSFXMuted;
 }
 public class GameSaver : MonoBehaviour
 {
@@ -81,6 +83,8 @@ public class GameSaver : MonoBehaviour
             dataSaver.isActive = new bool[maxLevel];
             dataSaver.isActive[0] = true;
             dataSaver.currentPageForLevels = 0;
+            dataSaver.isMusicMuted = false;
+            dataSaver.isSFXMuted = false;
         }
     }
     public void IncreaseLevel(int level)

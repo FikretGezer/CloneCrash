@@ -8,6 +8,7 @@ public class ItemController : MonoBehaviour
 {
     [SerializeField] private LayerMask pieceMask;
     [SerializeField] private float lerpSpeed = 1f;
+    [SerializeField] private AudioSource _audioSource;
     private Camera cam;
     private Vector2 startPos, endPos;
     private bool isThereAMatch;
@@ -124,6 +125,9 @@ public class ItemController : MonoBehaviour
     }
     private void Swapping(int currentColumn, int currentRow, int targetColumn, int targetRow)
     {
+        //Play swipe sound
+        SoundController.Instance.PlaySFX(SFXs.swipeSound);
+
         //Change positions in pieceList
         GameObject targetObj = ItemSpawnManager.Instance.pieceList[targetColumn, targetRow];
         ItemSpawnManager.Instance.pieceList[targetColumn, targetRow] = selectedPiece.gameObject;
