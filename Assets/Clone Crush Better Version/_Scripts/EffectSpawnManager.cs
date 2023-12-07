@@ -1,14 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EffectSpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject destroyEffectPrefab;
+    [SerializeField] private GameObject iceEffectPrefab;
+    [SerializeField] private GameObject rockEffectPrefab;
 
-    private List<GameObject> effects = new List<GameObject>();
+    private List<GameObject> normalEffects = new List<GameObject>();
+    private List<GameObject> iceEffects = new List<GameObject>();
+    private List<GameObject> rockEffects = new List<GameObject>();
     private GameObject effectParent;
-    private int index = 0;
     public static EffectSpawnManager Instance;
     private void Awake()
     {
@@ -16,31 +18,49 @@ public class EffectSpawnManager : MonoBehaviour
         effectParent = new GameObject();
         effectParent.name = "Effect Parent";
 
-        SpawnEffect();
+        SpawnEffect(destroyEffectPrefab, normalEffects);
+        SpawnEffect(iceEffectPrefab, iceEffects);
+        SpawnEffect(rockEffectPrefab, rockEffects);
     }
-    private void SpawnEffect()
+    private void SpawnEffect(GameObject spawnEffectPrefab, List<GameObject> effectList)
     {
         for (int i = 0; i < 20; i++)
         {
-            CreateEffect();
+            CreateEffect(spawnEffectPrefab, effectList);
         }
     }
-    private GameObject CreateEffect()
+    private GameObject CreateEffect(GameObject spawnEffectPrefab, List<GameObject> effectList)
     {
-        var effect = Instantiate(destroyEffectPrefab);
-        effect.name = "Effect_" + index.ToString();
+        var effect = Instantiate(spawnEffectPrefab);
+
         effect.SetActive(false);
         effect.transform.SetParent(effectParent.transform);
-        effects.Add(effect);
-        index++;
+
+        effectList.Add(effect);
         return effect;
     }
-    public GameObject GetEffectFromPool()
+    public GameObject GetNormalEffectFromPool()
     {
-        foreach(var effect in effects){
+        foreach(var effect in normalEffects){
             if(!effect.activeSelf)
                 return effect;
         }
-        return CreateEffect();
+        return CreateEffect(destroyEffectPrefab, normalEffects);
+    }
+    public GameObject GetIceEffectFromPool()
+    {
+        foreach(var effect in iceEffects){
+            if(!effect.activeSelf)
+                return effect;
+        }
+        return CreateEffect(iceEffectPrefab, iceEffects);
+    }
+    public GameObject GetRockEffectFromPool()
+    {
+        foreach(var effect in rockEffects){
+            if(!effect.activeSelf)
+                return effect;
+        }
+        return CreateEffect(rockEffectPrefab, rockEffects);
     }
 }

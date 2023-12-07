@@ -199,7 +199,7 @@ public class FindMatches : MonoBehaviour
             ItemController.Instance.moveState = MoveState.Stop;
             foreach(var item in matches)
             {
-                var effect = EffectSpawnManager.Instance.GetEffectFromPool();
+                var effect = EffectSpawnManager.Instance.GetNormalEffectFromPool();
                 effect.transform.position = item.transform.position;
                 effect.SetActive(true);
 
@@ -259,20 +259,6 @@ public class FindMatches : MonoBehaviour
         {
             ItemController.Instance.moveState = MoveState.Move;
         }
-        // yield return new WaitForSeconds(0.4f);
-        // //Check is there is any matches
-        // MatchFinding();
-        // yield return new WaitForSeconds(0.4f);
-        // if(matches.Count > 0)
-        // {
-        //     DestroyMatches();
-        // }
-        // else
-        // {
-        //     ItemSpawnManager.Instance.FillTheBoard();
-        //     yield return new WaitForSeconds(0.4f);
-        //     ItemController.Instance.moveState = MoveState.Move;
-        // }
     }
     private bool IsDeadlocked()
     {
@@ -332,9 +318,6 @@ public class FindMatches : MonoBehaviour
                     GameObject holder = pieceList[x, y];
                     pieceList[x, y] = pieceList[rndX, rndY];
                     pieceList[rndX, rndY] = holder;
-
-                    // pieceList[x, y].transform.position = new Vector2((int)rndX, (int)rndY);
-                    // pieceList[rndX, rndY].transform.position = new Vector2((int)x, (int)y);
 
                     pieceList[x, y].GetComponent<Piece>().column = x;
                     pieceList[x, y].GetComponent<Piece>().row = y;

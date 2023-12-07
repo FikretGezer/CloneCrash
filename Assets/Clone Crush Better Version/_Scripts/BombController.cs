@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,7 +31,7 @@ public class BombController : MonoBehaviour
         if(IsItAdjacent(column, row))
         {
             //Make Row Bomb
-            Debug.Log("Adjacent bomb is made.");
+            // Debug.Log("Adjacent bomb is made.");
             bombType = BombType.AdjacentBomb;
             MakeTheActualBomb(column, row, bombType);
             return;
@@ -84,25 +83,25 @@ public class BombController : MonoBehaviour
             if(swapDirection == "Horizontal")
             {
                 //Make Row Bomb
-                Debug.Log("Row bomb is made.");
+                // Debug.Log("Row bomb is made.");
                 bombType = BombType.RowBomb;
             }
             else
             {
                 //Make Column Bomb
-                Debug.Log("Column bomb is made.");
+                // Debug.Log("Column bomb is made.");
                 bombType = BombType.ColumnBomb;
             }
         }
         else if(matchedCount == 5 || matchedCount == 10)
         {
             //Make Color Bomb
-            Debug.Log("Color bomb is made.");
+            // Debug.Log("Color bomb is made.");
             bombType = BombType.ColorBomb;
         }
         else
         {
-            Debug.Log("No bomb is made.");
+            // Debug.Log("No bomb is made.");
             bombType = BombType.NoBomb;
         }
         MakeTheActualBomb(column, row, bombType);
@@ -170,7 +169,7 @@ public class BombController : MonoBehaviour
             bomb.SetActive(false);
             bombs.Add(bomb);
             ItemSpawnManager.Instance.pieceList[column, row] = bomb;
-            bomb.name = $"{column}, {row}";
+            // bomb.name = $"{column}, {row}";
             bomb.GetComponent<Piece>().column = column;
             bomb.GetComponent<Piece>().row = row;
         }
@@ -206,7 +205,6 @@ public class BombController : MonoBehaviour
                 FindMatches.Instance.AddToTheList(ItemSpawnManager.Instance.pieceList[x, row]);
             }
         }
-        //FindMatches.Instance.DestroyMatches();
     }
     public void ActivateColorBomb(int targetColumn, int targetRow)
     {

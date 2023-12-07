@@ -65,7 +65,7 @@ MonoBehaviour:
     row: 1
     type: 1
   objectives:
-  - objectiveSprite: {fileID: 21300000, guid: 3da4a10a354a29b4a8f8ea1fd9e44002, type: 3}
+  - objectiveSprite: {fileID: 21300000, guid: 4352229bc7907e6489be6b7944151976, type: 3}
     tagg: 6
     objectiveAmount: 12
   moveAmount: 25

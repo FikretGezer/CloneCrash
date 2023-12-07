@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,13 +33,13 @@ public class SoundController : MonoBehaviour
     private void Awake(){
         if(Instance == null) Instance = this;
 
+        PlayMusic();
+
         isMusicMuted = GameSaver.Instance.dataSaver.isMusicMuted;
         isSFXMuted = GameSaver.Instance.dataSaver.isSFXMuted;
 
         _audioSources[0].mute = isMusicMuted;
         _audioSources[1].mute = isSFXMuted;
-
-        PlayMusic();
     }
     private void PlayMusic()
     {
@@ -66,44 +64,46 @@ public class SoundController : MonoBehaviour
         //Play the clip
         _audioSources[1].PlayOneShot(clip);
     }
-    public void MuteMusic(Image _image)
+    public void MuteMusic(Image _musicImage)
     {
         if(!isMusicMuted)
         {
             isMusicMuted = true;
             _audioSources[0].mute = true;
-            _image.sprite = musicSprites[1];
+            _musicImage.sprite = musicSprites[1];
         }
         else
         {
             isMusicMuted = false;
             _audioSources[0].mute = false;
-            _image.sprite = musicSprites[0];
+            _musicImage.sprite = musicSprites[0];
         }
-        GameSaver.Instance.dataSaver.isMusicMuted = isMusicMuted ? true : false;
+        GameSaver.Instance.dataSaver.isMusicMuted = isMusicMuted;
     }
-    public void MuteSFX(Image _image)
+    public void MuteSFX(Image _sfxImage)
     {
         if(!isSFXMuted)
         {
             isSFXMuted = true;
             _audioSources[1].mute = true;
-            _image.sprite = sfxSprites[1];
+            _sfxImage.sprite = sfxSprites[1];
         }
         else
         {
             isSFXMuted = false;
             _audioSources[1].mute = false;
-            _image.sprite = sfxSprites[0];
+            _sfxImage.sprite = sfxSprites[0];
         }
-        GameSaver.Instance.dataSaver.isSFXMuted = isSFXMuted ? true : false;
+        GameSaver.Instance.dataSaver.isSFXMuted = isSFXMuted;
     }
     public void SetSFXImage(Image _sfxImage, bool isSFXMuted)
     {
+        //if sfx muted, set sfxOff Image, else set sfxOn Image
         _sfxImage.sprite = isSFXMuted ? sfxSprites[1] : sfxSprites[0];
     }
     public void SetMusicImage(Image _musicImage, bool isMusicMuted)
     {
+        //if music muted, set musicOff Image, else set musicOn Image
         _musicImage.sprite = isMusicMuted ? musicSprites[1] : musicSprites[0];
     }
 }

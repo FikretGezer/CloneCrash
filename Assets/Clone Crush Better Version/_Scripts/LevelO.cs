@@ -1,4 +1,3 @@
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -13,7 +12,7 @@ public class LevelO : MonoBehaviour
         loadingLvl = gameObject.name.Split("_")[1];
     }
     private void Start() {
-        Debug.Log("Length: " + GameSaver.Instance.dataSaver.isActive.Length + "<color=red>INSIDE OF THE LEVEL</color>");
+        // Debug.Log("Length: " + GameSaver.Instance.dataSaver.isActive.Length + "<color=red>INSIDE OF THE LEVEL</color>");
         if(GameSaver.Instance.dataSaver.isActive[int.Parse(loadingLvl) - 1])
         {
             GetComponent<Image>().sprite = unlockedSprite;
@@ -33,7 +32,7 @@ public class LevelO : MonoBehaviour
     }
     public void LoadLevel()
     {
-        Debug.Log($"Loading Level {loadingLvl}");
+        // Debug.Log($"Loading Level {loadingLvl}");
         PlayerPrefs.SetInt("Current Level", int.Parse(loadingLvl) - 1);
         ButtonController.Instance.LoadLevel("GameScene");
         // SceneManager.LoadScene("GameScene");

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -26,7 +24,7 @@ public class GameSaver : MonoBehaviour
         if(Instance == null) Instance = this;
         Load();
 
-        Debug.Log("Length: " + dataSaver.isActive.Length);
+        // Debug.Log("Length: " + dataSaver.isActive.Length);
     }
     private void Save()
     {
@@ -58,7 +56,7 @@ public class GameSaver : MonoBehaviour
         //Close the data stream
         file.Close();
 
-        Debug.Log("Saved");
+        // Debug.Log("Saved");
     }
     private void Load()
     {
@@ -75,7 +73,7 @@ public class GameSaver : MonoBehaviour
             //Close the data stream
             file.Close();
 
-            Debug.Log("Loaded");
+            // Debug.Log("Loaded");
         }
         else
         {

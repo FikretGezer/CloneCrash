@@ -27,9 +27,13 @@ public class ButtonController : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         if(musicImage != null)
+        {
             SoundController.Instance.SetMusicImage(musicImage, GameSaver.Instance.dataSaver.isMusicMuted);
+        }
         if(sfxImage != null)
+        {
             SoundController.Instance.SetSFXImage(sfxImage, GameSaver.Instance.dataSaver.isSFXMuted);
+        }
 
     }
     private void Start() {
@@ -51,6 +55,7 @@ public class ButtonController : MonoBehaviour
     public void LoadLevel(string levelName)
     {
         SoundController.Instance.PlaySFX(SFXs.buttonClick);
+        Time.timeScale = 1f;
         SceneManager.LoadScene(levelName);
     }
     public void PreviousPage()
@@ -87,7 +92,6 @@ public class ButtonController : MonoBehaviour
     public void StopTheGame()
     {
         SoundController.Instance.PlaySFX(SFXs.buttonClick);
-        //1-> We can stop the time
         if(Time.timeScale == 0f)
         {
             Time.timeScale = 1f;
@@ -102,7 +106,6 @@ public class ButtonController : MonoBehaviour
             inGameUI.SetActive(false);
             inGamePause.SetActive(true);
         }
-        //2-> we can disable scripts
     }
     #endregion
     #region Sound Buttons

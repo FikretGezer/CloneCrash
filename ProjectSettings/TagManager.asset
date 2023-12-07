@@ -25,6 +25,7 @@ TagManager:
   - Bomb
   - Breakable
   - Ice
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Water
   - UI
   - Pieces
-  - 
+  - Effect
   - 
   - 
   - 

@@ -168,7 +168,7 @@ public class ItemController : MonoBehaviour
             if(ItemSpawnManager.Instance.pieceList[column, row].tag == "Bomb"
             || ItemSpawnManager.Instance.pieceList[targetColumn, targetRow].tag == "Bomb") //this is a bomb
             {
-                Debug.Log("bomb");
+                // Debug.Log("bomb");
                 isThereAMatch = true;
             }
             if(!isThereAMatch)//No match

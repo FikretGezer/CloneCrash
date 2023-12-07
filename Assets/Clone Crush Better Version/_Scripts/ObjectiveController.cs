@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public enum ObjectiveTag
@@ -88,7 +87,7 @@ public class ObjectiveController : MonoBehaviour
             if(moveAmount <= 0)
             {
                 ActivateEndingMenus("lose");
-                Debug.Log("<color=green>FAILED!!!</color>");
+                // Debug.Log("<color=green>FAILED!!!</color>");
             }
         }
     }
@@ -135,7 +134,7 @@ public class ObjectiveController : MonoBehaviour
                         if(IsGameDone())
                         {
                             ActivateEndingMenus("win");
-                            Debug.Log("<color=red>WIN!!!</color>");
+                            // Debug.Log("<color=red>WIN!!!</color>");
                             GameSaver.Instance.IncreaseLevel(PlayerPrefs.GetInt("Current Level"));
                             // SceneManager.LoadScene("Menu");
                         }
