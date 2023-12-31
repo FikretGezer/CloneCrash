@@ -1,4 +1,4 @@
-# CloneCrash
+# CloneCrash ([GitHub Pages](https://pages.github.com/))
 ## Screenshots
 <div align="center">
  
