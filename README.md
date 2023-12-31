@@ -16,17 +16,17 @@ Clone Crash is basically a match-3 game that I tried to build after seeing these
 ### Detecting Matches
 * I added tags each one the pieces.
 * When players swipe towards any direction, I searched horizontal and vertical lines that contains the swiped pieces and if there is any matches after swiping, I added them in a matched list, if they're match of 4 or 5, I spawn special pieces like color, row, column bomb and I destroyed the matched ones.
-• Afte the matches, I moved the board and spawned new pieces. (This could be done with object pooling for the better performance.)
-• If there is not a match, I swiped back the pieces.
-• But there was an issue which is what if players matched 4 or 5 pieces when they swiped but matches are not in the same line. I wrote another code block for this to be able to detect if matches are in the same line. And if they are, I'd spawned a special piece.
-• During this process I made sure that players won't be able to swipe another piece while this process on going.
-• Also sometimes there was another issue appearing whichi is there were no possible move on the board. If this occurs, I wrote a code to suffle the board.
-• And lastly write a code block to detect possible matches to show players if they stuck during the game.
+* Afte the matches, I moved the board and spawned new pieces. (This could be done with object pooling for the better performance.)
+* If there is not a match, I swiped back the pieces.
+* But there was an issue which is what if players matched 4 or 5 pieces when they swiped but matches are not in the same line. I wrote another code block for this to be able to detect if matches are in the same line. And if they are, I'd spawned a special piece.
+* During this process I made sure that players won't be able to swipe another piece while this process on going.
+* Also sometimes there was another issue appearing whichi is there were no possible move on the board. If this occurs, I wrote a code to suffle the board.
+* And lastly write a code block to detect possible matches to show players if they stuck during the game.
 
 
 ### Levels
-• I created scriptable objects for levels and also another scriptable object to control levels easily while loading or doing something else.
-• Each level object contains; which pieces can be spawned because pieces spawns randomly, which tiles can be spawned like **concrete** (Breakable and doesn't contain any piece inside of it), **ice** (Breakable and contains a piece inside of it but pieces can't be moved), **jelly** (Breakable and contains a piece inside of it and pieces can be moved) or **empty** tiles, what's the layout of the board (5x5, 5x7, etc.), how many moves players have, what are the objectives.
+* I created scriptable objects for levels and also another scriptable object to control levels easily while loading or doing something else.
+* Each level object contains; which pieces can be spawned because pieces spawns randomly, which tiles can be spawned like **concrete** (Breakable and doesn't contain any piece inside of it), **ice** (Breakable and contains a piece inside of it but pieces can't be moved), **jelly** (Breakable and contains a piece inside of it and pieces can be moved) or **empty** tiles, what's the layout of the board (5x5, 5x7, etc.), how many moves players have, what are the objectives.
 
 ### Loading and Saving
 • I created a class 
