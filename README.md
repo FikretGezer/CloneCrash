@@ -26,8 +26,11 @@ Clone Crash is basically a match-3 game that I tried to build after seeing these
 
 ### Levels
 * I created scriptable objects for levels and also another scriptable object to control levels easily while loading or doing something else.
-  - asdasd 
-* Each level object contains; which pieces can be spawned because pieces spawns randomly, which tiles can be spawned like **concrete** (Breakable and doesn't contain any piece inside of it), **ice** (Breakable and contains a piece inside of it but pieces can't be moved), **jelly** (Breakable and contains a piece inside of it and pieces can be moved) or **empty** tiles, what's the layout of the board (5x5, 5x7, etc.), how many moves players have, what are the objectives.
+* Each level object contains;
+  - Which pieces can be spawned because pieces spawns randomly,
+  - Which tiles can be spawned like **concrete** (Breakable and doesn't contain any piece inside of it), **ice** (Breakable and contains a piece inside of it but pieces can't be moved), **jelly** (Breakable and contains a piece inside of it and pieces can be moved) or **empty** tiles,
+  - What's the layout of the board (5x5, 5x7, etc.),
+  - How many moves players have,
+  - What are the objectives.
 
 ### Loading and Saving
-• I created a class 
