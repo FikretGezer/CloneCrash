@@ -10,7 +10,7 @@
 </div>
 
 ## What is about?
-Clone Crash is basically a match-3 game that I tried to build after seeing these kinda games being popular around the world.
+Clone Crash is basically a Match 3 game that I tried to build after seeing these kinda games being popular around the world.
 
 ## How the game works?
 ### Detecting Matches
