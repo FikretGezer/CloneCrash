@@ -36,7 +36,7 @@ Clone Crash is basically a Match 3 game that I tried to build after seeing these
 ### Loading and Saving
 * I created a class to hold level indexes and other things like sound effects, musics and their volumes, etc.
 * I created an instance from this class.
-* If players passes the level, I was getting the current level's index and increasing it one using the instance of the class (this will only works if there is another level in level container scriptable object, if there is no other level, there won't be any increasing).
+* If players passes the level, I was getting the current level's index and increasing it one to unlock the new level using the instance of the class (this will only works if there is another level in level container scriptable object, if there is no other level, there won't be any increasing).
 * I did the same thing for the sounds too.
 * After all of this, I created a script to save this data on a local path using IO operations and Binary Formatters.
 * This saving was working when application closed or players switched between different scenes. And everytime players opens the game, game was detecting the save file and loading on the start.
