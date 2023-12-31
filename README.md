@@ -9,7 +9,7 @@
  <img src="https://github.com/FikretGezer/CloneCrash/assets/64322071/da6b7c68-0a98-43f3-9f77-9efdfa0f61bd" width="270" height="480"> 
 </div>
 
-## What is about?
+## What is this game about?
 Clone Crash is basically a Match 3 game that I tried to build after seeing these kinda games being popular around the world.
 
 ## How the game works?
