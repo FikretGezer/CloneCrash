@@ -14,8 +14,8 @@ Clone Crash is basically a match-3 game that I tried to build after seeing these
 
 ## How the game works?
 ### Detecting Matches
-• I added tags each one the pieces.
-• When players swipe towards any direction, I searched horizontal and vertical lines that contains the swiped pieces and if there is any matches after swiping, I added them in a matched list, if they're match of 4 or 5, I spawn special pieces like color, row, column bomb and I destroyed the matched ones.
+* I added tags each one the pieces.
+* When players swipe towards any direction, I searched horizontal and vertical lines that contains the swiped pieces and if there is any matches after swiping, I added them in a matched list, if they're match of 4 or 5, I spawn special pieces like color, row, column bomb and I destroyed the matched ones.
 • Afte the matches, I moved the board and spawned new pieces. (This could be done with object pooling for the better performance.)
 • If there is not a match, I swiped back the pieces.
 • But there was an issue which is what if players matched 4 or 5 pieces when they swiped but matches are not in the same line. I wrote another code block for this to be able to detect if matches are in the same line. And if they are, I'd spawned a special piece.
