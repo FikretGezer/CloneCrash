@@ -45,3 +45,4 @@ Clone Crash is basically a Match 3 game that I tried to build after seeing these
 ### Assets
 * [Hyper Casual FX by Lana Studio](https://assetstore.unity.com/packages/vfx/particles/hyper-casual-fx-200333)
 * [Cartoon FX Remaster Free FX by Jean Moreno](https://assetstore.unity.com/packages/vfx/particles/cartoon-fx-remaster-free-109565)
+* [Free Monsters Game Assets FX by CraftPix](https://free-game-assets.itch.io/free-monsters-game-assets)
