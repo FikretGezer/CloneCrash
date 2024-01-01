@@ -40,3 +40,8 @@ Clone Crash is basically a Match 3 game that I tried to build after seeing these
 * I did the same thing for the sounds too.
 * After all of this, I created a script to save this data on a local path using IO operations and Binary Formatters.
 * This saving was working when application closed or players switched between different scenes. And everytime players opens the game, game was detecting the save file and loading on the start.
+
+## Other Things
+### Assets
+* [Hyper Casual FX by Lana Studio](https://assetstore.unity.com/packages/vfx/particles/hyper-casual-fx-200333)
+* [Cartoon FX Remaster Free FX by Jean Moreno](https://assetstore.unity.com/packages/vfx/particles/cartoon-fx-remaster-free-109565)
